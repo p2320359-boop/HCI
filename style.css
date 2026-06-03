@@ -941,3 +941,11 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
 #input-modal {
   overflow-y: auto;
 }
+
+.page {
+  padding-bottom: 70px;
+}
+
+#input-modal {
+  padding-bottom: 70px;
+}
