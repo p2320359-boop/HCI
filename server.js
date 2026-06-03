@@ -1,11 +1,10 @@
 // ============================================================
-// server.js — Aemona v2 backend (DeepSeek API)
+// server.js — Aemona v2 backend (DeepSeek API) with fixed static serving
 // ============================================================
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,23 +12,28 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 静态文件服务：优先处理所有静态资源（.js, .css, .html 等）
-app.use(express.static(__dirname, {
-  index: false,        
-  extensions: false
-}));
+// 显式处理关键静态文件（避免被通配路由拦截）
+app.get('/data.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'data.js'), { headers: { 'Content-Type': 'application/javascript' } });
+});
+app.get('/app.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'app.js'), { headers: { 'Content-Type': 'application/javascript' } });
+});
+app.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'style.css'), { headers: { 'Content-Type': 'text/css' } });
+});
+// 其他静态资源（如果有图片等）可以使用 express.static，但显式处理足够
+app.use(express.static(__dirname, { index: false })); // 备用
 
-// API 路由
+// AI API 代理
 app.post('/api/ai', async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) {
-    return res.status(400).json({ error: 'Missing prompt' });
-  }
+  if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
 
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
-    console.error('❌ DEEPSEEK_API_KEY is not set in .env file');
-    return res.status(500).json({ error: 'API key not configured.' });
+    console.error('❌ DEEPSEEK_API_KEY not set');
+    return res.status(500).json({ error: 'API key not configured' });
   }
 
   try {
@@ -42,10 +46,7 @@ app.post('/api/ai', async (req, res) => {
       body: JSON.stringify({
         model: 'deepseek-v3-2-251201',
         messages: [
-          {
-            role: 'system',
-            content: 'You are a gentle, empathetic assistant for an emotional wellness app called Aemona. Always respond with valid JSON only when requested. Never include extra text outside the JSON structure.'
-          },
+          { role: 'system', content: 'You are a gentle, empathetic assistant for an emotional wellness app called Aemona. Always respond with valid JSON only when requested.' },
           { role: 'user', content: prompt }
         ],
         temperature: 0.7,
@@ -54,40 +55,23 @@ app.post('/api/ai', async (req, res) => {
     });
 
     const data = await response.json();
-
-    if (!response.ok) {
-      console.error('DeepSeek API error:', data);
-      return res.status(502).json({ error: data.error?.message || 'API call failed' });
-    }
+    if (!response.ok) throw new Error(data.error?.message || 'API call failed');
 
     const result = data.choices?.[0]?.message?.content;
-    if (!result) {
-      console.error('DeepSeek returned empty content', data);
-      return res.status(502).json({ error: 'Empty response from AI' });
-    }
+    if (!result) throw new Error('Empty response');
 
     res.json({ result });
-
   } catch (err) {
     console.error('Server error:', err);
-    res.status(500).json({ error: 'Server error: ' + err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
+// 所有其他请求返回 index.html（前端路由）
 app.get('*', (req, res) => {
-  const filePath = path.join(__dirname, req.path);
-  try {
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-      res.sendFile(filePath);
-    } else {
-      res.sendFile(path.join(__dirname, 'index.html'));
-    }
-  } catch (err) {
-    res.sendFile(path.join(__dirname, 'index.html'));
-  }
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`✦ Aemona running at http://localhost:${PORT}`);
-  console.log(`✦ AI backend: DeepSeek (model: deepseek-v3-2-251201)`);
 });
