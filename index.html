@@ -2,233 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aemona</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
 
   <!-- ══════════════════════════════════════
-       SPLASH
+       WELCOME
   ══════════════════════════════════════ -->
-  <div class="page show" id="splash">
-    <div class="splash-logo">🦋</div>
-    <div class="splash-name">aemona</div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       GUIDE (3 onboarding slides)
-  ══════════════════════════════════════ -->
-  <div class="page" id="guide">
-    <div class="guide-slides">
-
-      <div class="guide-slide active">
-        <div class="guide-illustration">🪼</div>
-        <div class="guide-title serif">It's not that<br>you won't.</div>
-        <p class="guide-sub">Emotions become clearer when you learn their language.</p>
-      </div>
-
-      <div class="guide-slide">
-        <div class="guide-illustration">🌊</div>
-        <div class="guide-title serif">You don't have to<br>name it to feel it.</div>
-        <p class="guide-sub">Aemona meets you where you are — even when that place is just "off".</p>
-      </div>
-
-      <div class="guide-slide">
-        <div class="guide-illustration">🌸</div>
-        <div class="guide-title serif">Step into your<br>inner world.</div>
-        <p class="guide-sub">Let's see what's waiting there.</p>
-      </div>
-
+  <div class="page show" id="welcome">
+    <div class="welcome-top">
+      <span class="welcome-tag">✦ AI-Powered Emotional Space</span>
+      <h1 class="serif">Aemona</h1>
+      <p class="welcome-subtitle">A soft place for feelings<br>that are hard to name.</p>
+      <div class="welcome-planet-bg"></div>
     </div>
-    <div class="guide-dots">
-      <div class="guide-dot active"></div>
-      <div class="guide-dot"></div>
-      <div class="guide-dot"></div>
-    </div>
-    <div class="guide-bottom">
-      <button class="btn" id="guide-btn" onclick="guideNext()">Continue</button>
+    <div class="welcome-bottom">
+      <button class="btn" onclick="go('auth')">Begin your journey</button>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       AUTH
+       AUTH (Sign In / Register)
   ══════════════════════════════════════ -->
   <div class="page" id="auth">
-    <div class="auth-hd" style="position:relative">
-      <button class="btn sm ghost auth-sign-in" id="auth-sign-in-btn" onclick="switchTab('login');document.getElementById('auth-sign-in-btn').style.display='none'">Sign in</button>
-      <h2 class="serif">Create your account</h2>
-      <p>Your private emotional space.</p>
-      <div class="auth-benefits">
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">☁️</div>
-          <p>Back up your journey and access Aemona across all your devices</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">✦</div>
-          <p>Unlock AI-powered support to name and work through your emotions</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">📊</div>
-          <p>Track your emotional check-ins and uncover patterns over time</p>
-        </div>
+    <div class="page-header">
+      <button class="back-btn" onclick="go('welcome')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Account</div>
+        <div style="font-size:12px;color:var(--muted);">Your space, your data</div>
       </div>
     </div>
     <div class="auth-wrap">
-      <!-- Social options -->
-      <div class="auth-social">
-        <button class="auth-social-btn" onclick="socialLogin('google')">
-          <span class="social-icon">G</span> Continue with Google
-        </button>
-        <button class="auth-social-btn" onclick="socialLogin('phone')">
-          <span class="social-icon">📱</span> Continue with phone
-        </button>
-      </div>
-
-      <div class="auth-divider">
-        <div class="auth-divider-line"></div>
-        <span>or</span>
-        <div class="auth-divider-line"></div>
-      </div>
-
-      <!-- Tab switch -->
       <div class="auth-tabs">
-        <div class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Sign In</div>
-        <div class="auth-tab"        id="tab-register" onclick="switchTab('register')">Create Account</div>
+        <div class="auth-tab active" id="tab-login"    onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab"        id="tab-register" onclick="switchAuthTab('register')">Create Account</div>
       </div>
 
-      <!-- Login form -->
+      <!-- Sign In -->
       <div id="login-form" class="auth-form">
-        <div class="auth-err" id="login-err"></div>
-        <div class="inp-group">
+        <div class="auth-error" id="login-error"></div>
+        <div class="input-group">
           <label>Username</label>
-          <input type="text"     id="l-user" placeholder="your username"       autocomplete="username">
+          <input type="text"     id="login-username" placeholder="your username"  autocomplete="username">
         </div>
-        <div class="inp-group">
+        <div class="input-group">
           <label>Password</label>
-          <input type="password" id="l-pass" placeholder="••••••••"            autocomplete="current-password">
+          <input type="password" id="login-password" placeholder="••••••••"       autocomplete="current-password">
         </div>
-        <button class="btn" onclick="handleLogin()" style="margin-top:6px">Sign In</button>
+        <button class="btn" style="margin-top:8px;" onclick="handleLogin()">Sign In</button>
       </div>
 
-      <!-- Register form -->
-      <div id="register-form" class="auth-form" style="display:none">
-        <div class="auth-err" id="reg-err"></div>
-        <div class="inp-group">
+      <!-- Register -->
+      <div id="register-form" class="auth-form" style="display:none;">
+        <div class="auth-error" id="register-error"></div>
+        <div class="input-group">
           <label>Username</label>
-          <input type="text"     id="r-user"    placeholder="choose a username"     autocomplete="username">
+          <input type="text"     id="reg-username" placeholder="choose a username"  autocomplete="username">
         </div>
-        <div class="inp-group">
+        <div class="input-group">
           <label>Password</label>
-          <input type="password" id="r-pass"    placeholder="at least 6 characters" autocomplete="new-password">
+          <input type="password" id="reg-password" placeholder="at least 6 characters" autocomplete="new-password">
         </div>
-        <div class="inp-group">
-          <label>Confirm</label>
-          <input type="password" id="r-confirm" placeholder="repeat password"        autocomplete="new-password">
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <input type="password" id="reg-confirm"  placeholder="repeat password"    autocomplete="new-password">
         </div>
-        <button class="btn" onclick="handleRegister()" style="margin-top:6px">Create Account</button>
+        <button class="btn" style="margin-top:8px;" onclick="handleRegister()">Create Account</button>
       </div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       SETUP (9 steps)
+       ONBOARDING
   ══════════════════════════════════════ -->
-  <div class="page" id="setup">
-    <div class="ph">
-      <div class="ph-back" onclick="setupBack()">←</div>
-      <div class="prog-bar" style="flex:1;margin:0">
-        <div class="prog-fill" id="setup-prog" style="width:11%"></div>
+  <div class="page" id="onboarding">
+    <div class="page-header">
+      <div>
+        <div class="serif" style="font-size:1.3rem;">About You</div>
+        <div style="font-size:12px;color:var(--muted);">Helps us understand your emotional style</div>
       </div>
-      <div class="step-count" id="setup-step-count">1/9</div>
     </div>
-    <div class="setup-body" id="setup-body"></div>
-    <div class="setup-footer">
-      <button class="btn" id="setup-next-btn" onclick="setupNext()">Continue</button>
-      <span class="setup-skip" onclick="skipSetup()">Skip the setup</span>
+    <div class="onboard-progress">
+      <div class="onboard-progress-fill" id="onboard-fill" style="width:0%"></div>
+    </div>
+    <!-- AI note shown above the questions -->
+    <div class="onboard-ai-note">
+      <span class="ai-badge">AI</span>
+      <span>After you answer, AI will analyse your responses and create a personal emotional sensitivity profile shown on your homepage.</span>
+    </div>
+    <div class="onboard-wrap" id="onboardBox"></div>
+    <div style="padding:0 24px 40px;">
+      <button class="btn" onclick="finishOnboarding()">Save & Continue</button>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       EXPLORE (home tab)
+       CALENDAR / HOME
   ══════════════════════════════════════ -->
-  <div class="page" id="explore">
-    <div class="explore-hd">
-      <div class="explore-title serif">Explore</div>
-      <button class="explore-share" onclick="">↗</button>
-    </div>
-    <div class="explore-scroll">
-      <div class="explore-subtitle">How are you feeling?</div>
-
-      <!-- Hero card — opens input modal -->
-      <div class="explore-hero" onclick="go('input-modal')">
-        <div class="hero-floating-items">
-          <div class="hero-chip">"I don't know why I feel this way"</div>
-          <div class="hero-chip">"Something feels off today"</div>
-          <div class="hero-chip">"My chest has been tight all week"</div>
+  <div class="page" id="calendar">
+    <div class="cal-header">
+      <div class="cal-user-info">
+        <div class="cal-avatar" id="cal-avatar">A</div>
+        <div>
+          <div class="cal-username" id="cal-username">—</div>
+          <div class="cal-subtitle">Memory Archive</div>
         </div>
-        <div class="hero-title serif">Any feeling is a starting point.</div>
-        <div class="hero-sub">A tight chest. A restless night. Even "I don't know why I feel this way" is somewhere to start.</div>
-        <button class="btn" style="margin-top:18px;max-width:180px;font-size:13px" onclick="event.stopPropagation();go('input-modal')">Find my words</button>
       </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+    </div>
 
-      <!-- AI sensitivity card -->
-      <div id="sens-card-explore"></div>
+    <div class="calendar-page-content">
+
+      <!-- AI Sensitivity Profile Card (rendered by JS) -->
+      <div id="sensitivity-card-wrap"></div>
+
+      <!-- Calendar -->
+      <div class="cal-month-row">
+        <div class="cal-month serif" id="calendar-month-year"></div>
+      </div>
+      <div class="calendar-weekdays">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span>
+        <span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div class="calendar-grid" id="calendar-grid"></div>
 
       <!-- Today's records -->
-      <div class="recent-section">
-        <div class="section-label">Today's records</div>
-        <div id="explore-hist-list"></div>
+      <div class="today-section">
+        <div class="section-label">Today's Records</div>
+        <div id="today-history-list"></div>
+      </div>
+
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-wrap">
+      <div class="fab-menu" id="fabMenu">
+        <div class="fab-items">
+          <div onclick="go('today');closeFab()">✍️ Today's Record</div>
+          <div onclick="go('reg-drag');closeFab()">🌊 Drag → Release</div>
+          <div onclick="go('reg-pinch');closeFab()">🫧 Pinch → Release</div>
+          <div onclick="go('reg-breath');closeFab()">🌬️ Breath</div>
+          <div onclick="go('reg-clear');closeFab()">✨ Clear Space</div>
+        </div>
+        <div class="fab" onclick="toggleFab()">+</div>
       </div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       INPUT MODAL (story entry)
+       TODAY — story input
   ══════════════════════════════════════ -->
-  <div class="page" id="input-modal">
-    <div class="input-modal-hd">
-      <div class="ph-close" onclick="go('explore')">✕</div>
-      <h2 class="serif" style="flex:1;padding:0 12px">What's on your mind right now?</h2>
-      <div class="unpack-chip">Unpack it ✦</div>
-    </div>
-
-    <!-- Story prompts & textarea -->
-    <div class="story-area">
-      <div class="story-prompts-list">
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I can't pinpoint…')">I can't pinpoint…</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('Something feels off today.')">Something feels off today.</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I can't stop thinking about that conversation…')">I can't stop thinking about that conversation…</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('A lot of small things have been adding up.')">A lot of small things have been adding up.</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I'm not sure why this is affecting me so much…')">I'm not sure why this is affecting me so much…</div>
-      </div>
-      <textarea id="story-input" placeholder="" maxlength="1000" oninput="updateCharCount()"></textarea>
-      <div class="story-char-count">0/1000</div>
-    </div>
-
-    <!-- Input mode tabs -->
-    <div class="input-mode-tabs">
-      <div class="mode-tab active" data-mode="type"  onclick="setInputMode('type')">
-        <span class="mode-tab-icon">⌨️</span> Type it
-      </div>
-      <div class="mode-tab" data-mode="say"   onclick="setInputMode('say')">
-        <span class="mode-tab-icon">🎤</span> Say it
-      </div>
-      <div class="mode-tab" data-mode="show"  onclick="setInputMode('show')">
-        <span class="mode-tab-icon">🖼</span> Show it
+  <div class="page" id="today">
+    <div class="page-header">
+      <button class="back-btn" onclick="go('calendar')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">What happened?</div>
+        <div style="font-size:12px;color:var(--muted);">No labels needed — just write</div>
       </div>
     </div>
-
-    <div class="divider-text">Sometimes choosing is easier.</div>
-
-    <!-- Quick tags -->
-    <div id="qtag-sections"></div>
-
-    <div class="input-footer">
-      <button class="btn" onclick="submitStory()">✦ Explore with AI</button>
+    <div class="story-wrap">
+      <p class="story-hint">Start from what happened. Describe the events, people, moments — however it comes out.</p>
+      <textarea id="story" placeholder="Something happened today…"></textarea>
+      <button class="btn accent" onclick="goToAIQuestions()">Explore with AI ✦</button>
+      <button class="btn secondary" onclick="go('calendar')">Back</button>
     </div>
   </div>
 
@@ -236,326 +177,139 @@
        AI LOADING
   ══════════════════════════════════════ -->
   <div class="page" id="ai-loading-page">
-    <div class="ai-load-wrap">
-      <div class="ai-orb"></div>
-      <div class="ai-status" id="ai-status">Reading what you shared…</div>
+    <div id="ai-loading">
+      <div class="ai-spinner"></div>
+      <div class="ai-status" id="ai-status-text">Reading your story…</div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       QUESTIONS (sliders)
+       QUESTIONS (AI-generated)
   ══════════════════════════════════════ -->
   <div class="page" id="questions">
-    <div class="ph">
-      <div class="ph-close" onclick="go('input-modal')">✕</div>
-      <div style="margin-left:auto">
-        <div class="unpack-chip">Unpack it ✦</div>
+    <div class="page-header">
+      <button class="back-btn" onclick="go('today')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Explore Deeper</div>
+        <div style="font-size:12px;color:var(--muted);">Questions based on your story</div>
       </div>
     </div>
-    <div class="q-page-body" id="q-page-body" style="flex:1;overflow-y:auto;padding:0 24px 40px"></div>
+    <div class="questions-wrap">
+      <div class="ai-questions-info">
+        <span class="ai-badge">AI</span>
+        <span>These questions were generated from what you wrote — no need to name your feelings yet.</span>
+      </div>
+      <div id="qBox"></div>
+      <button class="btn accent" onclick="generatePlanet()" style="margin-top:8px;">Generate My Planet ✦</button>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       RESULT
+       RESULT — emotion planet
   ══════════════════════════════════════ -->
-  <div class="page" id="result" style="position:relative">
-    <div class="ph-close result-close" onclick="go('explore')" style="position:absolute;top:52px;left:22px;z-index:10;width:34px;height:34px;background:var(--surface2);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted)">✕</div>
-    <div style="position:absolute;top:52px;right:22px;z-index:10;background:var(--surface2);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px" onclick="">⋯</div>
-
-    <div class="result-body">
-      <div class="result-you-feel">You are Feeling…</div>
-      <div class="result-emotion serif" id="result-emotion">—</div>
-      <div class="result-sub" id="result-subtitle"></div>
-
-      <!-- Emotional landscape -->
-      <div class="result-section">
-        <div class="result-section-title">Your emotional landscape</div>
-        <div id="landscape-bars"></div>
-      </div>
-
-      <!-- History note -->
-      <div class="result-history-note" id="result-history-note"></div>
-
-      <!-- Companion note -->
-      <div style="background:var(--purple-bg);border:1px solid var(--purple-bd);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.6;font-style:italic" id="companion-note"></div>
-
-      <!-- Recommended tools -->
-      <div class="result-section">
-        <div class="result-section-title">Tools recommended for you</div>
-        <div id="result-tools"></div>
-        <div class="result-see-more" onclick="go('tools-page')">See more →</div>
-      </div>
+  <div class="page" id="result">
+    <div class="page-header">
+      <div class="serif" style="font-size:1.3rem;flex:1;text-align:center;padding-right:38px;">Your Planet</div>
     </div>
-
-    <!-- Sticky footer -->
-    <div class="result-footer">
-      <button class="btn" onclick="saveResult()">Save</button>
-      <button class="btn ghost" onclick="go('explore')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       TOOLS PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="tools-page">
-    <div class="tools-hd">
-      <div class="tools-title serif">Tools</div>
-      <button class="tools-search">🔍</button>
-    </div>
-    <div class="tools-grid">
-      <div class="tool-card" onclick="go('reg-clear')">
-        <div class="tool-card-icon">👆</div>
-        <div class="tool-card-name">Tap It Out</div>
-        <div class="tool-card-desc">Release the tension, one tap at a time.</div>
+    <div class="result-wrap">
+      <div class="planet-scene">
+        <div class="planet-orb" id="planet-orb"></div>
+        <div class="planet-ring" id="planet-ring"></div>
       </div>
-      <div class="tool-card" onclick="go('reg-drag')">
-        <div class="tool-card-icon">🎨</div>
-        <div class="tool-card-name">Draw the Noise</div>
-        <div class="tool-card-desc">Give it a shape, don't need the right words.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-breath')">
-        <div class="tool-card-icon">🌬</div>
-        <div class="tool-card-name">Soft Breath</div>
-        <div class="tool-card-desc">Slow your breath, soften your body.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-badge')">
-        <div class="tool-card-icon">⭐</div>
-        <div class="tool-card-name">Pocket Badge</div>
-        <div class="tool-card-desc">You did well. Don't forget that.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-unsent')">
-        <div class="tool-card-icon">📝</div>
-        <div class="tool-card-name">Unsent Note</div>
-        <div class="tool-card-desc">Say it anyway. You don't have to send it.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-loop')">
-        <div class="tool-card-icon">🔥</div>
-        <div class="tool-card-name">Burn the Loop</div>
-        <div class="tool-card-desc">Let it go. It doesn't need to stay.</div>
+      <div class="planet-name serif" id="planet-name"></div>
+      <div class="emotion-label"     id="emotion-label"></div>
+      <p  class="analysis-text"      id="analysis-text"></p>
+      <div class="double-btn">
+        <button class="btn"           onclick="saveToCalendar()">Save to Calendar</button>
+        <button class="btn secondary" onclick="go('today')">Retry</button>
       </div>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       ENTRIES PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="entries-page">
-    <div class="entries-hd">
-      <div class="entries-title serif">Entries</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">📅</button>
-    </div>
-    <div class="month-tabs" id="month-tabs"></div>
-    <div class="entries-cal-body">
-      <div class="entries-subtitle">All the emotions you felt</div>
-      <div class="e-cal-wdays">
-        <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span>
-        <span>THU</span><span>FRI</span><span>SAT</span>
-      </div>
-      <div class="e-cal-grid" id="e-cal-grid"></div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       PATTERNS PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="patterns-page">
-    <div class="patterns-hd">
-      <div class="patterns-title serif">Patterns</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">⚙️</button>
-    </div>
-    <div class="patterns-tabs">
-      <div class="patterns-tab active" data-tab="overview" onclick="switchPatternsTab('overview')">Overview</div>
-      <div class="patterns-tab"        data-tab="deeper"   onclick="switchPatternsTab('deeper')">Dive Deeper</div>
-    </div>
-    <div class="patterns-body">
-      <div class="patterns-section-title">Streaks</div>
-      <div class="streak-row">
-        <div class="streak-card">
-          <div class="streak-label">Current Streak</div>
-          <div class="streak-num" id="streak-current">0</div>
-          <div class="streak-unit">days</div>
-        </div>
-        <div class="streak-card">
-          <div class="streak-label">Record Streak</div>
-          <div class="streak-num" id="streak-record">0</div>
-          <div class="streak-unit">days</div>
-        </div>
-      </div>
-
-      <div class="patterns-section-title" style="margin-top:8px">Stats</div>
-      <div class="stats-row" style="background:var(--surface2);border-radius:var(--radius);margin-bottom:20px">
-        <div class="stat-box">
-          <div class="stat-num" id="stat-entries">0</div>
-          <div class="stat-lbl">Entries</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-emotions">0</div>
-          <div class="stat-lbl">Emotions Explored</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-checkins">0</div>
-          <div class="stat-lbl">Check-ins</div>
-        </div>
-      </div>
-
-      <div class="top-emotion-card">
-        <div>
-          <div class="top-emotion-label">The emotion you felt most</div>
-          <div class="top-emotion-name serif" id="top-emotion-name">—</div>
-        </div>
-        <div style="font-size:36px">🌀</div>
-      </div>
-
-      <!-- Logout -->
-      <div style="margin-top:32px;text-align:center">
-        <button class="btn ghost" onclick="handleLogout()" style="max-width:200px;margin:0 auto">Sign out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: DRAG (Draw the Noise)
+       REGULATION: DRAG
   ══════════════════════════════════════ -->
   <div class="page" id="reg-drag">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Draw the Noise</div><div class="ph-sub">Give it a shape</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Move the orb however feels right. Fast, slow, chaotic — let the movement carry what words can't.</p>
-      <div class="drag-area" id="drag-area">
-        <div class="drag-ball" id="drag-ball"></div>
+    <div class="page-header">
+      <button class="back-btn" onclick="go('calendar')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Release Pressure</div>
+        <div style="font-size:12px;color:var(--muted);">Drag the ball anywhere</div>
       </div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
+    </div>
+    <div class="reg-wrap">
+      <p class="reg-desc">Let your hand lead. Move the ball however feels right — fast, slow, chaotic. Let the movement carry the tension.</p>
+      <div class="drag-area" id="dragArea">
+        <div class="drag-ball" id="dragBall"></div>
+      </div>
+      <button class="btn secondary small" onclick="go('calendar')">Done</button>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       REG: BREATH (Soft Breath)
+       REGULATION: PINCH
+  ══════════════════════════════════════ -->
+  <div class="page" id="reg-pinch">
+    <div class="page-header">
+      <button class="back-btn" onclick="go('calendar')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Squeeze & Release</div>
+        <div style="font-size:12px;color:var(--muted);">Hold to compress, release to expand</div>
+      </div>
+    </div>
+    <div class="reg-wrap">
+      <p class="reg-desc">Press and hold the orb. Feel the pressure. Then let go — and feel the release follow.</p>
+      <div class="pinch-area">
+        <div class="pinch-ball" id="pinchBall"></div>
+      </div>
+      <div class="pinch-count" id="pinch-count"></div>
+      <button class="btn secondary small" onclick="go('calendar')">Done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       REGULATION: BREATH
   ══════════════════════════════════════ -->
   <div class="page" id="reg-breath">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Soft Breath</div><div class="ph-sub">Follow the rhythm</div></div>
-    </div>
-    <div class="reg-body">
-      <div class="breath-scene">
-        <div class="breath-ring"><div class="breath-core"></div></div>
-        <div class="breath-label" id="breath-label">Breathe in…</div>
-        <div class="breath-note">4 seconds in · 4 seconds out</div>
+    <div class="page-header">
+      <button class="back-btn" onclick="go('calendar')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Slow Breathing</div>
+        <div style="font-size:12px;color:var(--muted);">Follow the rhythm</div>
       </div>
-      <button class="btn ghost sm" onclick="go('tools-page');stopBreath()">Done</button>
+    </div>
+    <div class="reg-wrap">
+      <div class="breath-wrap">
+        <div class="breath-circle"></div>
+        <div class="breath-label" id="breathLabel">Breathe in…</div>
+        <div style="font-size:12px;color:var(--muted);">4 seconds in · 4 seconds out</div>
+      </div>
+      <button class="btn secondary small" onclick="go('calendar');stopBreath()">Done</button>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════
-       REG: CLEAR (Tap It Out)
+       REGULATION: CLEAR
   ══════════════════════════════════════ -->
   <div class="page" id="reg-clear">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Tap It Out</div><div class="ph-sub">Release one by one</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Each orb holds something heavy. Tap to release it — until the space is yours again.</p>
-      <div class="clear-area" id="clear-area"></div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: BADGE (Pocket Badge)
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-badge">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Pocket Badge</div><div class="ph-sub">You did well today</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">You showed up for yourself today. That matters. Carry this with you.</p>
-      <div class="badge-area">⭐</div>
-      <div style="font-size:13px;color:var(--muted);text-align:center;line-height:1.7;max-width:260px">You did well.<br>Don't forget that.</div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: UNSENT NOTE
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-unsent">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Unsent Note</div><div class="ph-sub">Say it anyway</div></div>
-    </div>
-    <div class="reg-body" style="align-items:stretch">
-      <p class="reg-desc" style="text-align:left;max-width:100%">Write what you wish you could say — to anyone, about anything. You don't have to send it.</p>
-      <div class="unsent-area">
-        <textarea placeholder="Dear…"></textarea>
+    <div class="page-header">
+      <button class="back-btn" onclick="go('calendar')">←</button>
+      <div>
+        <div class="serif" style="font-size:1.3rem;">Create Space</div>
+        <div style="font-size:12px;color:var(--muted);">Tap each orb to let it go</div>
       </div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
+    </div>
+    <div class="reg-wrap">
+      <p class="reg-desc">Each orb holds a small weight. Tap to release it — one by one — until the space is yours again.</p>
+      <div class="clear-area" id="clearArea"></div>
+      <button class="btn secondary small" onclick="go('calendar')">Done</button>
     </div>
   </div>
-
-  <!-- ══════════════════════════════════════
-       REG: BURN THE LOOP
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-loop">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Burn the Loop</div><div class="ph-sub">Let it go</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Write the thought that keeps circling. Then let it burn.</p>
-      <div class="unsent-area" style="width:100%">
-        <textarea id="loop-text" placeholder="The thing I keep thinking about is…"></textarea>
-      </div>
-      <button class="btn" onclick="burnLoop()">🔥 Release it</button>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       BOTTOM NAV
-  ══════════════════════════════════════ -->
-  <nav class="bottom-nav" id="bottom-nav">
-    <div class="nav-item active" onclick="go('explore')">
-      <div class="nav-icon">△</div>
-      <div>Explore</div>
-    </div>
-    <div class="nav-item" onclick="go('tools-page')">
-      <div class="nav-icon">⬡</div>
-      <div>Tools</div>
-    </div>
-    <div class="nav-item" onclick="go('entries-page')">
-      <div class="nav-icon">◻</div>
-      <div>Entries</div>
-    </div>
-    <div class="nav-item" onclick="go('patterns-page')">
-      <div class="nav-icon">◻</div>
-      <div>Patterns</div>
-    </div>
-  </nav>
 
 </div><!-- #app -->
 
+<!-- data.js must load before app.js -->
 <script src="data.js"></script>
 <script src="app.js"></script>
-<script>
-  // Burn the loop animation
-  function burnLoop() {
-    const ta  = document.getElementById('loop-text');
-    const txt = ta.value.trim();
-    if (!txt) { alert('Write something first.'); return; }
-    ta.style.transition = 'opacity 0.8s, transform 0.8s';
-    ta.style.opacity    = '0';
-    ta.style.transform  = 'scale(0.95)';
-    setTimeout(() => {
-      ta.value        = '';
-      ta.style.opacity    = '1';
-      ta.style.transform  = 'scale(1)';
-      alert('✦ Released. It doesn\'t need to stay.');
-    }, 900);
-  }
-</script>
 </body>
 </html>
