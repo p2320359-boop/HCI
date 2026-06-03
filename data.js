@@ -1,561 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Aemona</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="app">
+// ============================================================
+// data.js — Aemona v2 constants
+// ============================================================
 
-  <!-- ══════════════════════════════════════
-       SPLASH
-  ══════════════════════════════════════ -->
-  <div class="page show" id="splash">
-    <div class="splash-logo">🦋</div>
-    <div class="splash-name">aemona</div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       GUIDE (3 onboarding slides)
-  ══════════════════════════════════════ -->
-  <div class="page" id="guide">
-    <div class="guide-slides">
-
-      <div class="guide-slide active">
-        <div class="guide-illustration">🪼</div>
-        <div class="guide-title serif">It's not that<br>you won't.</div>
-        <p class="guide-sub">Emotions become clearer when you learn their language.</p>
-      </div>
-
-      <div class="guide-slide">
-        <div class="guide-illustration">🌊</div>
-        <div class="guide-title serif">You don't have to<br>name it to feel it.</div>
-        <p class="guide-sub">Aemona meets you where you are — even when that place is just "off".</p>
-      </div>
-
-      <div class="guide-slide">
-        <div class="guide-illustration">🌸</div>
-        <div class="guide-title serif">Step into your<br>inner world.</div>
-        <p class="guide-sub">Let's see what's waiting there.</p>
-      </div>
-
-    </div>
-    <div class="guide-dots">
-      <div class="guide-dot active"></div>
-      <div class="guide-dot"></div>
-      <div class="guide-dot"></div>
-    </div>
-    <div class="guide-bottom">
-      <button class="btn" id="guide-btn" onclick="guideNext()">Continue</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       AUTH
-  ══════════════════════════════════════ -->
-  <div class="page" id="auth">
-    <div class="auth-hd" style="position:relative">
-      <button class="btn sm ghost auth-sign-in" id="auth-sign-in-btn" onclick="switchTab('login');document.getElementById('auth-sign-in-btn').style.display='none'">Sign in</button>
-      <h2 class="serif">Create your account</h2>
-      <p>Your private emotional space.</p>
-      <div class="auth-benefits">
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">☁️</div>
-          <p>Back up your journey and access Aemona across all your devices</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">✦</div>
-          <p>Unlock AI-powered support to name and work through your emotions</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">📊</div>
-          <p>Track your emotional check-ins and uncover patterns over time</p>
-        </div>
-      </div>
-    </div>
-    <div class="auth-wrap">
-      <!-- Social options -->
-      <div class="auth-social">
-        <button class="auth-social-btn" onclick="socialLogin('google')">
-          <span class="social-icon">G</span> Continue with Google
-        </button>
-        <button class="auth-social-btn" onclick="socialLogin('phone')">
-          <span class="social-icon">📱</span> Continue with phone
-        </button>
-      </div>
-
-      <div class="auth-divider">
-        <div class="auth-divider-line"></div>
-        <span>or</span>
-        <div class="auth-divider-line"></div>
-      </div>
-
-      <!-- Tab switch -->
-      <div class="auth-tabs">
-        <div class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Sign In</div>
-        <div class="auth-tab"        id="tab-register" onclick="switchTab('register')">Create Account</div>
-      </div>
-
-      <!-- Login form -->
-      <div id="login-form" class="auth-form">
-        <div class="auth-err" id="login-err"></div>
-        <div class="inp-group">
-          <label>Username</label>
-          <input type="text"     id="l-user" placeholder="your username"       autocomplete="username">
-        </div>
-        <div class="inp-group">
-          <label>Password</label>
-          <input type="password" id="l-pass" placeholder="••••••••"            autocomplete="current-password">
-        </div>
-        <button class="btn" onclick="handleLogin()" style="margin-top:6px">Sign In</button>
-      </div>
-
-      <!-- Register form -->
-      <div id="register-form" class="auth-form" style="display:none">
-        <div class="auth-err" id="reg-err"></div>
-        <div class="inp-group">
-          <label>Username</label>
-          <input type="text"     id="r-user"    placeholder="choose a username"     autocomplete="username">
-        </div>
-        <div class="inp-group">
-          <label>Password</label>
-          <input type="password" id="r-pass"    placeholder="at least 6 characters" autocomplete="new-password">
-        </div>
-        <div class="inp-group">
-          <label>Confirm</label>
-          <input type="password" id="r-confirm" placeholder="repeat password"        autocomplete="new-password">
-        </div>
-        <button class="btn" onclick="handleRegister()" style="margin-top:6px">Create Account</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       SETUP (9 steps)
-  ══════════════════════════════════════ -->
-  <div class="page" id="setup">
-    <div class="ph">
-      <div class="ph-back" onclick="setupBack()">←</div>
-      <div class="prog-bar" style="flex:1;margin:0">
-        <div class="prog-fill" id="setup-prog" style="width:11%"></div>
-      </div>
-      <div class="step-count" id="setup-step-count">1/9</div>
-    </div>
-    <div class="setup-body" id="setup-body"></div>
-    <div class="setup-footer">
-      <button class="btn" id="setup-next-btn" onclick="setupNext()">Continue</button>
-      <span class="setup-skip" onclick="skipSetup()">Skip the setup</span>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       EXPLORE (home tab)
-  ══════════════════════════════════════ -->
-  <div class="page" id="explore">
-    <div class="explore-hd">
-      <div class="explore-title serif">Explore</div>
-      <button class="explore-share" onclick="">↗</button>
-    </div>
-    <div class="explore-scroll">
-      <div class="explore-subtitle">How are you feeling?</div>
-
-      <!-- Hero card — opens input modal -->
-      <div class="explore-hero" onclick="go('input-modal')">
-        <div class="hero-floating-items">
-          <div class="hero-chip">"I don't know why I feel this way"</div>
-          <div class="hero-chip">"Something feels off today"</div>
-          <div class="hero-chip">"My chest has been tight all week"</div>
-        </div>
-        <div class="hero-title serif">Any feeling is a starting point.</div>
-        <div class="hero-sub">A tight chest. A restless night. Even "I don't know why I feel this way" is somewhere to start.</div>
-        <button class="btn" style="margin-top:18px;max-width:180px;font-size:13px" onclick="event.stopPropagation();go('input-modal')">Find my words</button>
-      </div>
-
-      <!-- AI sensitivity card -->
-      <div id="sens-card-explore"></div>
-
-      <!-- Today's records -->
-      <div class="recent-section">
-        <div class="section-label">Today's records</div>
-        <div id="explore-hist-list"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       INPUT MODAL (story entry)
-  ══════════════════════════════════════ -->
-  <div class="page" id="input-modal">
-    <div class="input-modal-hd">
-      <div class="ph-close" onclick="go('explore')">✕</div>
-      <h2 class="serif" style="flex:1;padding:0 12px">What's on your mind right now?</h2>
-      <div class="unpack-chip">Unpack it ✦</div>
-    </div>
-
-    <!-- Story prompts & textarea -->
-    <div class="story-area">
-      <div class="story-prompts-list">
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I can\'t pinpoint…')">I can't pinpoint…</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('Something feels off today.')">Something feels off today.</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I can\'t stop thinking about that conversation…')">I can't stop thinking about that conversation…</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('A lot of small things have been adding up.')">A lot of small things have been adding up.</div>
-        <div class="story-prompt-row" onclick="fillStoryPrompt('I\'m not sure why this is affecting me so much…')">I'm not sure why this is affecting me so much…</div>
-      </div>
-      <textarea id="story-input" placeholder=" oninput="updateCharCount()"></textarea>
-      <div class="story-char-count" id="story-char-count">0/1000</div>
-    </div>
-
-    <!-- Input mode tabs -->
-    <div class="input-mode-tabs">
-      <div class="mode-tab active" data-mode="type"  onclick="setInputMode('type')">
-        <span class="mode-tab-icon">⌨️</span> Type it
-      </div>
-      <div class="mode-tab" data-mode="say"   onclick="setInputMode('say')">
-        <span class="mode-tab-icon">🎤</span> Say it
-      </div>
-      <div class="mode-tab" data-mode="show"  onclick="setInputMode('show')">
-        <span class="mode-tab-icon">🖼</span> Show it
-      </div>
-    </div>
-
-    <div class="divider-text">Sometimes choosing is easier.</div>
-
-    <!-- Quick tags -->
-    <div id="qtag-sections"></div>
-
-    <div class="input-footer">
-      <button class="btn" onclick="submitStory()">✦ Explore with AI</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       AI LOADING
-  ══════════════════════════════════════ -->
-  <div class="page" id="ai-loading-page">
-    <div class="ai-load-wrap">
-      <div class="ai-orb"></div>
-      <div class="ai-status" id="ai-status">Reading what you shared…</div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       QUESTIONS (sliders)
-  ══════════════════════════════════════ -->
-  <div class="page" id="questions">
-    <div class="ph">
-      <div class="ph-close" onclick="go('input-modal')">✕</div>
-      <div style="margin-left:auto">
-        <div class="unpack-chip">Unpack it ✦</div>
-      </div>
-    </div>
-    <div class="q-page-body" id="q-page-body" style="flex:1;overflow-y:auto;padding:0 24px 40px"></div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       RESULT
-  ══════════════════════════════════════ -->
-  <div class="page" id="result" style="position:relative">
-    <div class="ph-close result-close" onclick="go('explore')" style="position:absolute;top:52px;left:22px;z-index:10;width:34px;height:34px;background:var(--surface2);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted)">✕</div>
-    <div style="position:absolute;top:52px;right:22px;z-index:10;background:var(--surface2);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px" onclick="">⋯</div>
-
-    <div class="result-body">
-      <div class="result-you-feel">You are Feeling…</div>
-      <div class="result-emotion serif" id="result-emotion">—</div>
-      <div class="result-sub" id="result-subtitle"></div>
-
-      <!-- Emotional landscape -->
-      <div class="result-section">
-        <div class="result-section-title">Your emotional landscape</div>
-        <div id="landscape-bars"></div>
-      </div>
-
-      <!-- History note -->
-      <div class="result-history-note" id="result-history-note"></div>
-
-      <!-- Companion note -->
-      <div style="background:var(--purple-bg);border:1px solid var(--purple-bd);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.6;font-style:italic" id="companion-note"></div>
-
-      <!-- Recommended tools -->
-      <div class="result-section">
-        <div class="result-section-title">Tools recommended for you</div>
-        <div id="result-tools"></div>
-        <div class="result-see-more" onclick="go('tools-page')">See more →</div>
-      </div>
-    </div>
-
-    <!-- Sticky footer -->
-    <div class="result-footer">
-      <button class="btn" onclick="saveResult()">Save</button>
-      <button class="btn ghost" onclick="go('explore')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       TOOLS PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="tools-page">
-    <div class="tools-hd">
-      <div class="tools-title serif">Tools</div>
-      <button class="tools-search">🔍</button>
-    </div>
-    <div class="tools-grid">
-      <div class="tool-card" onclick="go('reg-clear')">
-        <div class="tool-card-icon">👆</div>
-        <div class="tool-card-name">Tap It Out</div>
-        <div class="tool-card-desc">Release the tension, one tap at a time.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-drag')">
-        <div class="tool-card-icon">🎨</div>
-        <div class="tool-card-name">Draw the Noise</div>
-        <div class="tool-card-desc">Give it a shape, don't need the right words.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-breath')">
-        <div class="tool-card-icon">🌬</div>
-        <div class="tool-card-name">Soft Breath</div>
-        <div class="tool-card-desc">Slow your breath, soften your body.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-badge')">
-        <div class="tool-card-icon">⭐</div>
-        <div class="tool-card-name">Pocket Badge</div>
-        <div class="tool-card-desc">You did well. Don't forget that.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-unsent')">
-        <div class="tool-card-icon">📝</div>
-        <div class="tool-card-name">Unsent Note</div>
-        <div class="tool-card-desc">Say it anyway. You don't have to send it.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-loop')">
-        <div class="tool-card-icon">🔥</div>
-        <div class="tool-card-name">Burn the Loop</div>
-        <div class="tool-card-desc">Let it go. It doesn't need to stay.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       ENTRIES PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="entries-page">
-    <div class="entries-hd">
-      <div class="entries-title serif">Entries</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">📅</button>
-    </div>
-    <div class="month-tabs" id="month-tabs"></div>
-    <div class="entries-cal-body">
-      <div class="entries-subtitle">All the emotions you felt</div>
-      <div class="e-cal-wdays">
-        <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span>
-        <span>THU</span><span>FRI</span><span>SAT</span>
-      </div>
-      <div class="e-cal-grid" id="e-cal-grid"></div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       PATTERNS PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="patterns-page">
-    <div class="patterns-hd">
-      <div class="patterns-title serif">Patterns</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">⚙️</button>
-    </div>
-    <div class="patterns-tabs">
-      <div class="patterns-tab active" data-tab="overview" onclick="switchPatternsTab('overview')">Overview</div>
-      <div class="patterns-tab"        data-tab="deeper"   onclick="switchPatternsTab('deeper')">Dive Deeper</div>
-    </div>
-    <div class="patterns-body">
-      <div class="patterns-section-title">Streaks</div>
-      <div class="streak-row">
-        <div class="streak-card">
-          <div class="streak-label">Current Streak</div>
-          <div class="streak-num" id="streak-current">0</div>
-          <div class="streak-unit">days</div>
-        </div>
-        <div class="streak-card">
-          <div class="streak-label">Record Streak</div>
-          <div class="streak-num" id="streak-record">0</div>
-          <div class="streak-unit">days</div>
-        </div>
-      </div>
-
-      <div class="patterns-section-title" style="margin-top:8px">Stats</div>
-      <div class="stats-row" style="background:var(--surface2);border-radius:var(--radius);margin-bottom:20px">
-        <div class="stat-box">
-          <div class="stat-num" id="stat-entries">0</div>
-          <div class="stat-lbl">Entries</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-emotions">0</div>
-          <div class="stat-lbl">Emotions Explored</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-checkins">0</div>
-          <div class="stat-lbl">Check-ins</div>
-        </div>
-      </div>
-
-      <div class="top-emotion-card">
-        <div>
-          <div class="top-emotion-label">The emotion you felt most</div>
-          <div class="top-emotion-name serif" id="top-emotion-name">—</div>
-        </div>
-        <div style="font-size:36px">🌀</div>
-      </div>
-
-      <!-- Logout -->
-      <div style="margin-top:32px;text-align:center">
-        <button class="btn ghost" onclick="handleLogout()" style="max-width:200px;margin:0 auto">Sign out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: DRAG (Draw the Noise)
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-drag">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Draw the Noise</div><div class="ph-sub">Give it a shape</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Move the orb however feels right. Fast, slow, chaotic — let the movement carry what words can't.</p>
-      <div class="drag-area" id="drag-area">
-        <div class="drag-ball" id="drag-ball"></div>
-      </div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: BREATH (Soft Breath)
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-breath">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Soft Breath</div><div class="ph-sub">Follow the rhythm</div></div>
-    </div>
-    <div class="reg-body">
-      <div class="breath-scene">
-        <div class="breath-ring"><div class="breath-core"></div></div>
-        <div class="breath-label" id="breath-label">Breathe in…</div>
-        <div class="breath-note">4 seconds in · 4 seconds out</div>
-      </div>
-      <button class="btn ghost sm" onclick="go('tools-page');stopBreath()">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: CLEAR (Tap It Out)
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-clear">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Tap It Out</div><div class="ph-sub">Release one by one</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Each orb holds something heavy. Tap to release it — until the space is yours again.</p>
-      <div class="clear-area" id="clear-area"></div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: BADGE (Pocket Badge)
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-badge">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Pocket Badge</div><div class="ph-sub">You did well today</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">You showed up for yourself today. That matters. Carry this with you.</p>
-      <div class="badge-area">⭐</div>
-      <div style="font-size:13px;color:var(--muted);text-align:center;line-height:1.7;max-width:260px">You did well.<br>Don't forget that.</div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: UNSENT NOTE
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-unsent">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Unsent Note</div><div class="ph-sub">Say it anyway</div></div>
-    </div>
-    <div class="reg-body" style="align-items:stretch">
-      <p class="reg-desc" style="text-align:left;max-width:100%">Write what you wish you could say — to anyone, about anything. You don't have to send it.</p>
-      <div class="unsent-area">
-        <textarea placeholder="Dear…"></textarea>
-      </div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       REG: BURN THE LOOP
-  ══════════════════════════════════════ -->
-  <div class="page" id="reg-loop">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Burn the Loop</div><div class="ph-sub">Let it go</div></div>
-    </div>
-    <div class="reg-body">
-      <p class="reg-desc">Write the thought that keeps circling. Then let it burn.</p>
-      <div class="unsent-area" style="width:100%">
-        <textarea id="loop-text" placeholder="The thing I keep thinking about is…"></textarea>
-      </div>
-      <button class="btn" onclick="burnLoop()">🔥 Release it</button>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       BOTTOM NAV
-  ══════════════════════════════════════ -->
-  <nav class="bottom-nav" id="bottom-nav">
-    <div class="nav-item active" onclick="go('explore')">
-      <div class="nav-icon">△</div>
-      <div>Explore</div>
-    </div>
-    <div class="nav-item" onclick="go('tools-page')">
-      <div class="nav-icon">⬡</div>
-      <div>Tools</div>
-    </div>
-    <div class="nav-item" onclick="go('entries-page')">
-      <div class="nav-icon">◻</div>
-      <div>Entries</div>
-    </div>
-    <div class="nav-item" onclick="go('patterns-page')">
-      <div class="nav-icon">◻</div>
-      <div>Patterns</div>
-    </div>
-  </nav>
-
-</div><!-- #app -->
-
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>
-  // Burn the loop animation
-  function burnLoop() {
-    const ta  = document.getElementById('loop-text');
-    const txt = ta.value.trim();
-    if (!txt) { alert('Write something first.'); return; }
-    ta.style.transition = 'opacity 0.8s, transform 0.8s';
-    ta.style.opacity    = '0';
-    ta.style.transform  = 'scale(0.95)';
-    setTimeout(() => {
-      ta.value        = '';
-      ta.style.opacity    = '1';
-      ta.style.transform  = 'scale(1)';
-      alert('✦ Released. It doesn\'t need to stay.');
-    }, 900);
+// ── ONBOARDING GUIDE SLIDES (3 screens before auth) ──────────
+const GUIDE_SLIDES = [
+  {
+    title: "It's not that you won't.",
+    sub:   "Emotions become clearer when you learn their language.",
+    color: "#e8e0f5"
+  },
+  {
+    title: "You don't have to name it to feel it.",
+    sub:   "Aemona meets you where you are — even when that place is just 'off'.",
+    color: "#f0e8f8"
+  },
+  {
+    title: "Step into your inner world.",
+    sub:   "Let's see what's waiting there.",
+    color: "#ede8f5"
   }
-</script>
-</body>
-</html>
+];
+
+// ── COMPANIONS (setup step 4/9) ───────────────────────────────
+const COMPANIONS = [
+  {
+    id: "milo",
+    name: "Milo",
+    emoji: "💧",
+    color: "#a8c8e8",
+    tagline: "Some feelings don't arrive with answers right away.",
+    desc: "Milo reminds you that it's okay to slow down and simply be with what you're feeling."
+  },
+  {
+    id: "avis",
+    name: "Avis",
+    emoji: "⭐",
+    color: "#f0b8d0",
+    tagline: "You don't have to be ready to take the next step.",
+    desc: "Avis encourages you to trust your own pace, even when things feel uncertain."
+  },
+  {
+    id: "echo",
+    name: "Echo",
+    emoji: "☁️",
+    color: "#c8b8e8",
+    tagline: "Sometimes it's hard to explain what's going on inside.",
+    desc: "Echo helps you find language for things you've been carrying quietly, even when the words aren't there yet."
+  },
+  {
+    id: "sila",
+    name: "Sila",
+    emoji: "🟫",
+    color: "#d4c4a8",
+    tagline: "Not everything has to make sense right now.",
+    desc: "Sila supports you in finding the path ahead one small step at a time."
+  }
+];
+
+// ── SETUP STEP 2: How do you respond to emotions? ────────────
+const EMOTION_RESPONSE_OPTIONS = [
+  { id: "understand", emoji: "🌦", label: "Try to understand it" },
+  { id: "sitwith",    emoji: "💧", label: "Sit with it for a while" },
+  { id: "busy",       emoji: "🚀", label: "Keep moving and stay busy" },
+  { id: "reachout",   emoji: "✨", label: "Reach out to someone" }
+];
+
+// ── SETUP STEP 5: Why are you here? ──────────────────────────
+const GOALS_OPTIONS = [
+  { id: "g1", label: "I want to feel less overwhelmed by the intensity of what I feel" },
+  { id: "g2", label: "I want to understand what triggers my emotional reactions" },
+  { id: "g3", label: "I want to put words to my emotions before they build up inside" },
+  { id: "g4", label: "I want to bounce back faster from emotionally draining days" },
+  { id: "g5", label: "Another reason not listed here" }
+];
+
+// ── SETUP STEP 6: What would feel most helpful? ──────────────
+const HELPFUL_OPTIONS = [
+  { id: "h1", label: "Gentle guidance to help me find the words" },
+  { id: "h2", label: "A private space to explore what's inside" },
+  { id: "h3", label: "Insights into my emotional patterns over time" },
+  { id: "h4", label: "Tools to help me regulate when things feel big" },
+  { id: "h5", label: "Another thing not listed here" }
+];
+
+// ── EXPLORE QUICK-TAG CATEGORIES ─────────────────────────────
+const QUICK_TAGS = {
+  about: ["Me", "About something", "To", "About someone", "About myself", "All of everything"],
+  duration: ["+", "Just now", "+", "Most of today", "Several days", "Longer than that"],
+  space: ["+", "In the background", "Keeps coming back", "Hard to ignore", "It's all I can think about"],
+  body: ["+", "Head", "Chest", "Throat", "Stomach", "Legs"]
+};
+
+// ── AI FOLLOW-UP QUESTIONS (slider style, companion shown) ───
+const FALLBACK_SLIDER_QUESTIONS = [
+  {
+    q:    "When this feeling shows up… what feels more true?",
+    left: "It makes me pull inward",
+    right:"It makes me push against something"
+  },
+  {
+    q:    "Right now… how close does it feel to the surface?",
+    left: "Buried deep",
+    right:"Right at the edge"
+  },
+  {
+    q:    "How long has this been sitting with you?",
+    left: "Just arrived",
+    right:"Been here a while"
+  },
+  {
+    q:    "In your body… where do you feel it most?",
+    left: "Scattered",
+    right:"One clear place"
+  },
+  {
+    q:    "Right now… what would help more?",
+    left: "Feeling understood",
+    right:"Feeling reassured"
+  }
+];
+
+// ── EMOTIONAL LANDSCAPE DIMENSIONS (result screen) ───────────
+const EMOTION_DIMENSIONS = [
+  { left: "JOY",      leftEmoji: "✦",  right: "SADNESS",      rightEmoji: "💧", key: "joy_sadness" },
+  { left: "TRUST",    leftEmoji: "♥",  right: "DISGUST",      rightEmoji: "⬡",  key: "trust_disgust" },
+  { left: "FEAR",     leftEmoji: "●",  right: "ANGER",        rightEmoji: "✸",  key: "fear_anger" },
+  { left: "SURPRISE", leftEmoji: "✦",  right: "ANTICIPATION", rightEmoji: "▲",  key: "surprise_anticipation" }
+];
+
+// ── TOOLS GRID ────────────────────────────────────────────────
+const TOOLS = [
+  { id: "tap",     name: "Tap It Out",    desc: "Release the tension, one tap at a time.",      emoji: "👆", page: "reg-clear"  },
+  { id: "draw",    name: "Draw the Noise",desc: "Give it a shape, don't need the right words.", emoji: "🎨", page: "reg-drag"   },
+  { id: "breath",  name: "Soft Breath",   desc: "Slow your breath, soften your body.",          emoji: "🌬", page: "reg-breath" },
+  { id: "badge",   name: "Pocket Badge",  desc: "You did well. Don't forget that.",             emoji: "⭐", page: "reg-badge"  },
+  { id: "unsent",  name: "Unsent Note",   desc: "Say it anyway. You don't have to send it.",    emoji: "📝", page: "reg-unsent" },
+  { id: "loop",    name: "Burn the Loop", desc: "Let it go. It doesn't need to stay.",          emoji: "🔥", page: "reg-loop"   }
+];
+
+// ── STORY PROMPTS shown greyed in textarea ────────────────────
+const STORY_PROMPTS = [
+  "I can't pinpoint…",
+  "Something feels off today.",
+  "I can't stop thinking about that conversation…",
+  "A lot of small things have been adding up.",
+  "I'm not sure why this is affecting me so much…"
+];
+
+// ── SENSITIVITY LEVELS ────────────────────────────────────────
+const SENS_LEVELS = [
+  { min: 1.0, max: 1.8, label: "Grounded",        color: "#51cf66" },
+  { min: 1.8, max: 2.6, label: "Balanced",         color: "#74c0fc" },
+  { min: 2.6, max: 3.4, label: "Perceptive",       color: "#a9e34b" },
+  { min: 3.4, max: 4.2, label: "Sensitive",        color: "#c084fc" },
+  { min: 4.2, max: 5.1, label: "Highly Sensitive", color: "#f472b6" }
+];
+
+// ── PROFILE DIMENSION LABELS ──────────────────────────────────
+const PROFILE_DIMS = [
+  "Overwhelm sensitivity", "Pressure sensitivity",
+  "Overthinking tendency", "Emotional intensity", "Need for solitude"
+];
+
+// ── FALLBACK PLANET (if AI fails) ────────────────────────────
+const FALLBACK_PLANET = {
+  name: "Wandering", emotion: "Unclear",
+  color: "#9b8ec4",
+  gradient: "radial-gradient(circle at 35% 35%, #c4b8e8, #9b8ec4 55%, #4a3a6a)",
+  description: "Something is stirring beneath the surface. Even if words feel out of reach right now, that is okay — the feeling is still real and worth holding gently.",
+  landscape: { joy_sadness: 35, trust_disgust: 55, fear_anger: 40, surprise_anticipation: 50 },
+  tools: ["breath", "unsent"]
+};
