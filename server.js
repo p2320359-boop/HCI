@@ -1,61 +1,41 @@
-// ============================================================
-// server.js — Aemona backend
-// Serves /public and proxies AI calls to Anthropic.
-// Your API key lives only here, never in the browser.
-//
-// HOW TO SWITCH AI PROVIDER:
-//   This server only proxies to Anthropic.
-//   To use a different provider, either:
-//   1) Edit the fetch() call below to point to your provider, OR
-//   2) Set AI_PROVIDER in app.js to 'openai', 'doubao', etc.
-//      and paste your key in AI_KEY — the server is then bypassed.
-//
-// RUN:
-//   node server.js        (production)
-//   npx nodemon server.js (auto-restart during development)
-// ============================================================
-
 require('dotenv').config();
 const express = require('express');
-const fetch   = require('node-fetch');
-const path    = require('path');
-
-const app  = express();
-const PORT = process.env.PORT || 3000;
-
+const fetch = require('node-fetch');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 300;
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// ── POST /api/ai ──────────────────────────────────────────────
+// 适配字节方舟接口（你的key是ark，不能用anthropic入参格式）
 app.post('/api/ai', async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt || typeof prompt !== 'string')
-    return res.status(400).json({ error: 'Missing prompt field.' });
-
-  if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY.includes('YOUR-KEY'))
-    return res.status(500).json({ error: 'API key not configured. Edit .env and restart.' });
-
+  if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+  const key = process.env.ANTHROPIC_API_KEY;
   try {
-    const r    = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
       method: 'POST',
       headers: {
-        'Content-Type':      'application/json',
-        'x-api-key':         process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${key}`
       },
       body: JSON.stringify({
-        model:      'deepseek-v3-2-251201',
-        max_tokens: 1024,
-        messages:   [{ role: 'user', content: prompt }]
+        model: "deepseek-v3-2-251201",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 1024
       })
-    });
-    const data = await r.json();
-    if (data.error) { console.error('Anthropic error:', data.error); return res.status(502).json({ error: data.error.message }); }
-    res.json({ result: (data.content || []).map(b => b.text || '').join('') });
+    })
+    const data = await resp.json();
+    const content = data.choices?.[0]?.message?.content || '';
+    res.json({ result: content });
   } catch (err) {
-    console.error('Server error:', err);
-    res.status(500).json({ error: 'Server failed to reach AI.' });
+    console.error(err);
+    res.status(500).json({ error: 'AI接口异常' });
   }
-});
+})
 
-app.listen(PORT, () => console.log(`\n✦ Aemona running at http://localhost:${PORT}\n`));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.listen(PORT, () => console.log('✦ Aemona running at http://localhost:3000'));
