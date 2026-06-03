@@ -946,6 +946,13 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
   padding-bottom: 70px;
 }
 
-#input-modal {
+.explore-scroll,    
+#input-modal,        
+.q-page-body,        
+.result-body,        
+.entries-cal-body,   
+.patterns-body,    
+.reg-body            
+{
   padding-bottom: 70px;
 }
