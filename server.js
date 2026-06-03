@@ -1,10 +1,11 @@
 // ============================================================
-// server.js — Aemona v2 backend (fixed for Render)
+// server.js — Aemona v2 backend (static files from memory)
 // ============================================================
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,11 +13,38 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 关键: 将所有静态文件（.js, .css, .html 等）放在最前面，用 express.static 托管
-// 注意：第一个参数是当前目录（__dirname），这样请求 /data.js 就会去根目录找 data.js
-app.use(express.static(__dirname, {
-  index: false,   // 禁用自动索引，因为我们会手动处理根路径
-}));
+// 在启动时读取静态文件内容到内存中
+let dataJsContent = '';
+let appJsContent = '';
+let styleCssContent = '';
+let indexHtmlContent = '';
+
+try {
+  dataJsContent = fs.readFileSync(path.join(__dirname, 'data.js'), 'utf8');
+  appJsContent = fs.readFileSync(path.join(__dirname, 'app.js'), 'utf8');
+  styleCssContent = fs.readFileSync(path.join(__dirname, 'style.css'), 'utf8');
+  indexHtmlContent = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  console.log('✓ Static files loaded into memory');
+} catch (err) {
+  console.error('❌ Failed to load static files:', err.message);
+  process.exit(1);
+}
+
+// 显式返回静态文件内容
+app.get('/data.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(dataJsContent);
+});
+
+app.get('/app.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(appJsContent);
+});
+
+app.get('/style.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.send(styleCssContent);
+});
 
 // API 路由
 app.post('/api/ai', async (req, res) => {
@@ -25,7 +53,7 @@ app.post('/api/ai', async (req, res) => {
 
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
-    console.error('❌ DEEPSEEK_API_KEY is not set');
+    console.error('❌ DEEPSEEK_API_KEY not set');
     return res.status(500).json({ error: 'API key not configured' });
   }
 
@@ -58,9 +86,14 @@ app.post('/api/ai', async (req, res) => {
   }
 });
 
+// 根路径返回 index.html
+app.get('/', (req, res) => {
+  res.send(indexHtmlContent);
+});
 
+// 其他所有路径返回 index.html（用于前端路由）
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.send(indexHtmlContent);
 });
 
 app.listen(PORT, () => {
