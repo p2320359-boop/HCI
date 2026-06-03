@@ -5,15 +5,21 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
 
-// DeepSeek API 代理
+// 静态文件服务：优先处理所有静态资源（.js, .css, .html 等）
+app.use(express.static(__dirname, {
+  index: false,        
+  extensions: false
+}));
+
+// API 路由
 app.post('/api/ai', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) {
@@ -23,7 +29,7 @@ app.post('/api/ai', async (req, res) => {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
     console.error('❌ DEEPSEEK_API_KEY is not set in .env file');
-    return res.status(500).json({ error: 'API key not configured. Please add DEEPSEEK_API_KEY to .env' });
+    return res.status(500).json({ error: 'API key not configured.' });
   }
 
   try {
@@ -34,7 +40,7 @@ app.post('/api/ai', async (req, res) => {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'deepseek-v3-2-251201',     
+        model: 'deepseek-v3-2-251201',
         messages: [
           {
             role: 'system',
@@ -69,10 +75,19 @@ app.post('/api/ai', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const filePath = path.join(__dirname, req.path);
+  try {
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      res.sendFile(filePath);
+    } else {
+      res.sendFile(path.join(__dirname, 'index.html'));
+    }
+  } catch (err) {
+    res.sendFile(path.join(__dirname, 'index.html'));
+  }
 });
 
 app.listen(PORT, () => {
   console.log(`✦ Aemona running at http://localhost:${PORT}`);
-  console.log(`✦ AI backend: DeepSeek (model: deepseek-chat)`);
+  console.log(`✦ AI backend: DeepSeek (model: deepseek-v3-2-251201)`);
 });
