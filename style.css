@@ -956,3 +956,9 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
 {
   padding-bottom: 70px;
 }
+
+.splash-logo-img {
+  width: 80px;
+  height: auto;
+  animation: logo-in 0.8s ease;
+}
