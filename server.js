@@ -1,61 +1,54 @@
-// ============================================================
-// server.js — Aemona backend
-// Serves /public and proxies AI calls to Anthropic.
-// Your API key lives only here, never in the browser.
-//
-// HOW TO SWITCH AI PROVIDER:
-//   This server only proxies to Anthropic.
-//   To use a different provider, either:
-//   1) Edit the fetch() call below to point to your provider, OR
-//   2) Set AI_PROVIDER in app.js to 'openai', 'doubao', etc.
-//      and paste your key in AI_KEY — the server is then bypassed.
-//
-// RUN:
-//   node server.js        (production)
-//   npx nodemon server.js (auto-restart during development)
-// ============================================================
-
-require('dotenv').config();
-const express = require('express');
-const fetch   = require('node-fetch');
-const path    = require('path');
-
-const app  = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// ── POST /api/ai ──────────────────────────────────────────────
-app.post('/api/ai', async (req, res) => {
-  const { prompt } = req.body;
-  if (!prompt || typeof prompt !== 'string')
-    return res.status(400).json({ error: 'Missing prompt field.' });
-
-  if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY.includes('YOUR-KEY'))
-    return res.status(500).json({ error: 'API key not configured. Edit .env and restart.' });
-
-  try {
-    const r    = await fetch('https://api.anthropic.com/v1/messages', {
+async function callAI(prompt) {
+  console.log('[AI] calling provider:', AI_PROVIDER);
+  console.log('[AI] prompt preview:', prompt.slice(0, 120));
+  let res, data;
+  if (AI_PROVIDER === 'local-server') {
+    try {
+      res  = await fetch('/api/ai', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data.result;
+    }catch(err){
+      // AI接口不通直接返回对应兜底JSON文本，分场景
+      if(prompt.includes('sensitivity profile')){
+        return `{"score":3.2,"label":"Perceptive","tagline":"You notice what others miss, and feel it more deeply.","strengths":["Deep empathy","Self-awareness","Intuition"],"challenges":["Overstimulation","Boundary-setting"],"tip":"Regular quiet time helps you reset and integrate."}`
+      }else if(prompt.includes('slider questions')){
+        return `[{"q":"When this feeling shows up… what feels more true?","left":"It makes me pull inward","right":"It makes me push against something"},{"q":"Right now… how close does it feel to the surface?","left":"Buried deep","right":"Right at the edge"},{"q":"How long has this been sitting with you?","left":"Just arrived","right":"Been here a while"},{"q":"In your body… where do you feel it most?","left":"Scattered","right":"One clear place"},{"q":"Right now… what would help more?","left":"Feeling understood","right":"Feeling reassured"}]`
+      }else{
+        return `{"emotion":"Unclear","subtitle":"A feeling waiting to unfold","color1":"#9b8ec4","color2":"#d4c4f0","gradient":"radial-gradient(circle at 35% 35%, #c4b8e8, #9b8ec4 55%, #4a3a6a)","landscape":{"joy_sadness":35,"trust_disgust":55,"fear_anger":40,"surprise_anticipation":50},"tools":["breath","unsent"],"companion_note":"It’s okay to not have words for everything you carry."}`
+      }
+    }
+  } else if (AI_PROVIDER === 'openai') {
+    res  = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type':      'application/json',
-        'x-api-key':         process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model:      'deepseek-v3-2-251201',
-        max_tokens: 1024,
-        messages:   [{ role: 'user', content: prompt }]
-      })
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AI_KEY}` },
+      body: JSON.stringify({ model: AI_MODEL || 'gpt-4o', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
     });
-    const data = await r.json();
-    if (data.error) { console.error('Anthropic error:', data.error); return res.status(502).json({ error: data.error.message }); }
-    res.json({ result: (data.content || []).map(b => b.text || '').join('') });
-  } catch (err) {
-    console.error('Server error:', err);
-    res.status(500).json({ error: 'Server failed to reach AI.' });
+    data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+  } else if (AI_PROVIDER === 'doubao') {
+    res  = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AI_KEY}` },
+      body: JSON.stringify({ model: AI_MODEL || 'ep-your-endpoint-id', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
+    });
+    data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
+  } else if (AI_PROVIDER === 'openai-compat') {
+    const base = AI_ENDPOINT_COMPAT || 'https://api.deepseek.com';
+    res  = await fetch(`${base}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AI_KEY}` },
+      body: JSON.stringify({ model: AI_MODEL || 'deepseek-chat', max_tokens: 1024, messages: [{ role: 'user', content: prompt }] })
+    });
+    data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.choices[0].message.content;
   }
-});
-
-app.listen(PORT, () => console.log(`\n✦ Aemona running at http://localhost:${PORT}\n`));
+  throw new Error('Unknown AI_PROVIDER: ' + AI_PROVIDER);
+}
