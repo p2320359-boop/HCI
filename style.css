@@ -937,3 +937,7 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
 .month-tab.today-tab:hover {
   background: var(--purple-bg);
 }
+
+#input-modal {
+  overflow-y: auto;
+}
