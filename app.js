@@ -680,7 +680,7 @@ The user shared: "${currentStory}"
 
 ⚠️ IMPORTANT: You MUST respond in the SAME LANGUAGE as the user's story. If the user wrote in Chinese, respond in Chinese. If the user wrote in Korean, respond in Korean. Never use English when the user used another language.
 
-Generate exactly 5 short introspective slider questions to help them explore their emotional state.
+Generate exactly 8 short introspective slider questions to help them explore their emotional state.
 Each question presents a spectrum between two opposite poles (not numeric, just descriptive ends).
 
 Rules:
