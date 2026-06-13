@@ -216,46 +216,81 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
 /* ══════════════════════════════════════════
    GUIDE (onboarding slides)
 ══════════════════════════════════════════ */
+/* 修改 guide 容器：允许滚动，撑开高度 */
 #guide {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   transition: background-image 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;           /* 占满视口高度 */
 }
-.guide-slides { flex: 1; position: relative; overflow: hidden; }
+
+/* 让 slides 容器自然占满剩余空间，不再 absolute 限制 */
+.guide-slides {
+  flex: 1;
+  position: relative;
+  min-height: 400px;       /* 保证内容区域有足够高度 */
+  overflow: visible;       /* 改为 visible，避免裁剪 */
+}
+
+/* 每个 slide 仍然绝对定位，但父容器高度由内容撑开 */
 .guide-slide {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: flex-start;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: 40px 32px 20px;
-  opacity: 0; transform: translateX(30px);
+  opacity: 0;
+  transform: translateX(30px);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
+  height: auto;
+  min-height: 100%;        /* 至少撑满父容器 */
 }
+
 .guide-slide.active {
-  opacity: 1; transform: translateX(0); pointer-events: all;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
 }
-.guide-slide.prev { transform: translateX(-30px); }
-.guide-illustration {
-  width: 260px; height: 200px;
-  background: linear-gradient(135deg, #e8d8f8, #d4c4f0, #c4b4e8);
-  border-radius: 20px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 80px; margin-bottom: 32px;
-  box-shadow: 0 8px 40px rgba(107,79,160,0.15);
+
+.guide-slide.prev {
+  transform: translateX(-30px);
 }
-.guide-title { font-family: 'Ibarra Real Nova', serif; font-size: 1.8rem; color: var(--text); text-align: center; line-height: 1.25; margin-bottom: 14px; }
-.guide-sub   { font-size: 14px; color: var(--text2); text-align: center; line-height: 1.7; }
+
+/* 按钮区域不再绝对定位，改为正常文档流，在最后一个 slide 下方自然出现 */
 .guide-bottom {
-  position: absolute;
-  left: 27px;
-  top: 820px;
+  margin: 30px auto 50px;
   width: 376px;
   height: 60px;
+  position: relative;
+  left: auto;
+  top: auto;
+  flex-shrink: 0;
 }
+
 #guide-btn {
   width: 376px;
   height: 60px;
+}
+
+/* 可选：保持每个 slide 的 illustration 不变 */
+.guide-illustration {
+  width: 260px;
+  height: 200px;
+  background: linear-gradient(135deg, #e8d8f8, #d4c4f0, #c4b4e8);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 40px rgba(107,79,160,0.15);
 }
 
 /* ══════════════════════════════════════════
