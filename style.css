@@ -221,54 +221,38 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
   background-size: cover;
   background-position: center;
   transition: background-image 0.25s ease;
-  height: 100vh;
-  overflow-y: hidden;   /* 禁止上下滚动，仅允许左右滑动切换 */
 }
-
-.guide-slides {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: visible;
-}
-
+.guide-slides { flex: 1; position: relative; overflow: hidden; }
 .guide-slide {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;   /* 内容垂直居中 */
-  padding: 20px 32px 40px;   /* 适当减小内边距 */
-  opacity: 0;
-  transform: translateX(30px);
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 40px 32px 20px;
+  opacity: 0; transform: translateX(30px);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
-  height: 100%;
-  overflow-y: auto;          /* 如果内容仍过多，内部可滚动（但一般不会） */
 }
-
 .guide-slide.active {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: all;
+  opacity: 1; transform: translateX(0); pointer-events: all;
 }
-
-.guide-slide.prev {
-  transform: translateX(-30px);
+.guide-slide.prev { transform: translateX(-30px); }
+.guide-illustration {
+  width: 260px; height: 200px;
+  background: linear-gradient(135deg, #e8d8f8, #d4c4f0, #c4b4e8);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 80px; margin-bottom: 32px;
+  box-shadow: 0 8px 40px rgba(107,79,160,0.15);
 }
-
-/* 按钮容器不再绝对定位，跟随内容流 */
+.guide-title { font-family: 'Ibarra Real Nova', serif; font-size: 1.8rem; color: var(--text); text-align: center; line-height: 1.25; margin-bottom: 14px; }
+.guide-sub   { font-size: 14px; color: var(--text2); text-align: center; line-height: 1.7; }
 .guide-bottom {
-  margin-top: 30px;
+  position: absolute;
+  left: 27px;
+  top: 820px;
   width: 376px;
   height: 60px;
-  position: relative;
-  left: auto;
-  top: auto;
-  flex-shrink: 0;
 }
-
 #guide-btn {
   width: 376px;
   height: 60px;
@@ -7975,4 +7959,123 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 .asset-email-button, .asset-create, .asset-google, .asset-phone, .asset-apple {
   width: 100% !important;
   left: 0 !important;
+}
+
+/* ============================================================
+   移动端适配修复（针对第二版 UI）
+   使页面适应手机屏幕，所有内容可滚动，按钮和导航栏不偏移
+   ============================================================ */
+
+/* 1. 让整个 app 容器不隐藏溢出，允许页面滚动 */
+#app {
+  overflow: visible !important;
+  min-height: 100vh;
+  height: auto;
+}
+
+/* 2. 所有页面容器可滚动，且内容正常显示 */
+.page {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  height: auto !important;
+  min-height: 100vh;
+  padding-bottom: 80px;  /* 底部留出空间给导航栏 */
+}
+
+/* 3. 底部导航栏固定在底部，不随滚动移动，且居中 */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 90vw !important;
+  max-width: 416px;
+  background-color: var(--surface);
+  border-radius: 20px 20px 0 0;
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+/* 4. 修复绝对定位元素在手机上的偏移（转为相对布局或百分比） */
+/* 针对 Explore 主页 */
+.explore-hero-main {
+  width: 90vw !important;
+  max-width: 376px;
+  height: auto;
+  aspect-ratio: 376 / 270;
+  margin: 0 auto;
+}
+.discover-card-art, .tool-mini-art {
+  width: 100% !important;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+.discover-shelf, .tools-categories {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* 5. 针对 Setup 页面（绝对定位的选项按钮） */
+.setup-answer {
+  width: 40vw !important;
+  max-width: 166px;
+  height: auto;
+  aspect-ratio: 166 / 178;
+}
+.setup-answer-a { left: 5% !important; right: auto; }
+.setup-answer-b { left: auto !important; right: 5% !important; }
+.setup-answer-c { left: 5% !important; top: 55% !important; right: auto; }
+.setup-answer-d { left: auto !important; right: 5% !important; top: 55% !important; }
+.setup-check-hit {
+  left: 5% !important;
+  width: 90% !important;
+}
+
+/* 6. 针对 Input Modal 页面 */
+#input-modal .story-area {
+  left: 5% !important;
+  width: 90% !important;
+}
+.input-mode-tabs {
+  left: 5% !important;
+  width: 90% !important;
+  justify-content: space-around;
+}
+.mode-tab {
+  width: 28vw !important;
+  height: auto;
+  aspect-ratio: 128 / 88;
+}
+
+/* 7. 针对 Result 页面底部按钮 */
+.result-footer {
+  position: relative !important;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+/* 8. 通用按钮大小调整（防止过大） */
+.btn {
+  width: auto;
+  min-width: 160px;
+  padding: 12px 20px;
+  margin: 0 auto;
+}
+
+/* 9. 确保 Companion 卡片网格不错位 */
+.companion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px;
+}
+.companion-card {
+  margin: 0;
+}
+
+/* 10. 为所有页面底部增加安全区域（适配全面屏） */
+.page {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
 }
