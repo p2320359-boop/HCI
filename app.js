@@ -348,15 +348,19 @@ function showLoggedOutEntry() {
 }
 
 (function init() {
-  console.log('Init: starting splash');
   go('splash');
-
-  // 强制 1.8 秒后进入 guide，不依赖任何外部回调
-  setTimeout(() => {
-    console.log('Init: timeout, going to guide');
-    go('guide');
-  }, 1800);
-})();
+  const setupPreviewParam = new URLSearchParams(window.location.search).get('setup');
+  if (setupPreviewParam !== null) {
+    const previewStep = Number(setupPreviewParam || 1);
+    setupStep = Math.min(9, Math.max(1, Number.isFinite(previewStep) ? previewStep : 1));
+    currentUser = localStorage.getItem('ae_user') || 'setup_preview';
+    selectedCompanion = COMPANIONS.find(c => c.id === getData(currentUser).companion) || COMPANIONS[0];
+    setTimeout(() => {
+      hideBottomNav();
+      go('setup');
+    }, 0);
+    return;
+  }
 
   const savedCurrentUser = localStorage.getItem('ae_user');
   if (savedCurrentUser) {
