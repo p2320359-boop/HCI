@@ -7854,3 +7854,42 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 
 /* 4. 确保绝对定位的按钮在滚动时不会被裁剪（它们会随内容滚动，这是正常的） */
 /* 不需要额外修改，因为它们是相对于页面内容定位的 */
+/* ============================================================
+   修复 Setup 页面无法滚动的问题（保留背景图和按钮位置）
+   ============================================================ */
+
+/* 让 Setup 页面容器允许滚动 */
+#setup.setup-asset-mode {
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  min-height: 100vh;          /* 让高度至少占满屏幕 */
+  height: auto;
+  position: relative;
+}
+
+/* 移除 .setup-body 的绝对定位，让它自然撑开高度 */
+#setup.setup-asset-mode .setup-body {
+  position: relative !important;
+  min-height: 932px;          /* 保持背景图高度，确保滚动条出现 */
+  pointer-events: none;       /* 保留原样式，但绝对定位已改 */
+}
+
+/* 确保绝对定位的选项按钮仍然可以点击（它们相对于 .setup-body 定位） */
+.setup-option-layer,
+.setup-check-overlay,
+.setup-reminder-overlay,
+.setup-final-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+/* 调整底部的按钮容器，确保它显示在内容末尾 */
+.setup-footer {
+  position: relative;
+  margin-top: 20px;
+  padding-bottom: 30px;
+}
