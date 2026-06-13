@@ -7,17 +7,32 @@ const GUIDE_SLIDES = [
   {
     title: "It's not that you won't.",
     sub:   "Emotions become clearer when you learn their language.",
-    color: "#e8e0f5"
+    color: "#e8e0f5",
+    background: "assets/WelcomeSectionBG/S0.svg"
   },
   {
     title: "You don't have to name it to feel it.",
     sub:   "Aemona meets you where you are — even when that place is just 'off'.",
-    color: "#f0e8f8"
+    color: "#f0e8f8",
+    background: "assets/WelcomeSectionBG/S1.svg"
   },
   {
     title: "Step into your inner world.",
     sub:   "Let's see what's waiting there.",
-    color: "#ede8f5"
+    color: "#ede8f5",
+    background: "assets/WelcomeSectionBG/S2.svg"
+  },
+  {
+    background: "assets/WelcomeSectionBG/S3.svg"
+  },
+  {
+    background: "assets/WelcomeSectionBG/S4.svg"
+  },
+  {
+    background: "assets/WelcomeSectionBG/S5.svg"
+  },
+  {
+    background: "assets/WelcomeSectionBG/S6.svg"
   }
 ];
 
@@ -164,7 +179,8 @@ const PROFILE_DIMS = [
 
 // ── FALLBACK PLANET (if AI fails) ────────────────────────────
 const FALLBACK_PLANET = {
-  name: "Wandering", emotion: "Unclear",
+  name: "Wandering", emotion: "Blank",
+  definition: "So much happened that you don't feel anything yet.",
   color: "#9b8ec4",
   gradient: "radial-gradient(circle at 35% 35%, #c4b8e8, #9b8ec4 55%, #4a3a6a)",
   description: "Something is stirring beneath the surface. Even if words feel out of reach right now, that is okay — the feeling is still real and worth holding gently.",
