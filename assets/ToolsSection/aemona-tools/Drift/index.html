@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Drift</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .back-home {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #6C4F88;
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 14px 30px rgba(108, 79, 136, .13);
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+    }
+
+    .back-home svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+
+</head>
+
+<body class="tool-drift">
+
+  <a class="back-home" href="../index.html" aria-label="Back to tools">
+    <svg viewBox="0 0 24 24">
+      <path d="m15 18-6-6 6-6"></path>
+    </svg>
+  </a>
+
+  <main class="drift-page">
+
+    <header class="hero">
+
+      <h1>Drift</h1>
+
+      <p class="subtitle">
+        Not every feeling arrives in a clear shape.
+      </p>
+
+    </header>
+
+    <section id="canvas-wrapper">
+    </section>
+
+    <div class="canvas-hint">
+      <span class="hint-dot"></span>
+      Click anywhere to see it shift
+    </div>
+
+    <section class="reflection">
+
+      <p>
+        What looks messy,
+        <br>
+        unstable,
+        <br>
+        or out of control
+        <br>
+        may simply be emotion
+        <br>
+        finding its form.
+      </p>
+
+    </section>
+
+
+  </main>
+
+  <script src="sketch.js"></script>
+
+</body>
+
+</html>
