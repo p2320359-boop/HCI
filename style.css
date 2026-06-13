@@ -7828,8 +7828,6 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
   -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
   height: auto;
   min-height: 100vh;
-  /* 关键：底部留出足够空间，防止内容被固定导航栏遮挡 */
-  padding-bottom: 85px !important;
   box-sizing: border-box;
 }
 
@@ -7845,8 +7843,7 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
   background-color: var(--surface);
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-  /* 确保导航栏不会被内容遮盖 */
-  pointer-events: auto;
+
 }
 
 /* 3. 如果某些特殊页面（如 #input-modal）已经自带滚动，避免冲突 */
