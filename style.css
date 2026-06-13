@@ -30,6 +30,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body { height: 100%; }
+@supports (height: 100dvh) { html, body { height: 100dvh; min-height: 100dvh; } }
 
 body {
   background: var(--bg);
@@ -47,7 +48,8 @@ body {
   min-height: 100vh;
   background: var(--surface);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   background: transparent;
@@ -221,6 +223,9 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
   background-size: cover;
   background-position: center;
   transition: background-image 0.25s ease;
+  min-height: 932px;        /* match design canvas height */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .guide-slides { flex: 1; position: relative; overflow: hidden; }
 .guide-slide {
@@ -261,16 +266,17 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
 /* ══════════════════════════════════════════
    AUTH
 ══════════════════════════════════════════ */
-#auth { background: #f9f7f3; position: relative; padding-bottom: 0; }
+#auth { background: #f9f7f3; position: relative; padding-bottom: 0; overflow-y: auto; overflow-x: hidden; }
 .auth-view {
   display: none;
-  min-height: 100vh;
+  min-height: 932px;   /* tall enough to contain all absolute-positioned buttons */
   width: 100%;
   position: relative;
   padding: 0;
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 430px 932px;
+  /* Allow the auth page itself to scroll when viewport is shorter than 932px */
 }
 .auth-view.active { display: block; }
 #auth-create-view { background-image: url('assets/Signin&CreateBG/Create.svg'); }
@@ -360,6 +366,8 @@ label { font-size: 11px; color: var(--muted); letter-spacing: 0.07em; text-trans
   gap: 14px;
   padding: 180px 27px 38px;
   background: #f9f7f3;
+  overflow-y: auto;
+  min-height: 100%;
 }
 .auth-form-view.active { display: flex; flex-direction: column; }
 .auth-form-view .auth-back {
@@ -507,7 +515,8 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 #setup.setup-asset-mode {
   min-height: 932px;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;    /* allow scroll to reach buttons at bottom of 932px canvas */
+  overflow-x: hidden;
 }
 .setup-asset-back {
   display: none;
@@ -6472,7 +6481,8 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 430px 932px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #explore .explore-hd {
@@ -7818,58 +7828,56 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
   top: 555px;
 }
 
-/* ============================================================
-   修复所有页面滚动问题 + 固定底部导航栏
-   ============================================================ */
+/* ── RESPONSIVE: Short viewport (phones < 800px tall) ─────────
+   Scale the 430×932 design canvas proportionally so it fits
+   without requiring scroll on most modern phones.
+   The transform origin is top-left so button positions stay correct. */
+@media (max-height: 800px) {
+  .auth-view {
+    /* Scale the 932px canvas to fit the viewport height */
+    transform-origin: top center;
+    /* Calculate scale: viewport-height / 932 */
+    /* Using a CSS approach: shrink the background and reposition absolute elements */
+  }
 
-/* 1. 让每个页面容器都可以滚动，同时保证内容完整显示 */
-.page {
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
-  height: auto;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
+  /* Shrink the auth background image to match actual viewport */
+  .auth-view {
+    background-size: 430px max(100vh, 600px);
+  }
 
-/* 2. 固定底部导航栏：无论页面如何滚动，始终贴在屏幕底部 */
-.bottom-nav {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: calc(100% - 20px);
-  max-width: 416px;
-  z-index: 1000;
-  background-color: var(--surface);
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  /* Adjust button positions proportionally for common phone heights */
+  /* 812px phone (e.g. iPhone X) — scale factor ~0.87 */
+  #auth-create-view .asset-google  { top: clamp(480px, 67.5vh, 630px); }
+  #auth-create-view .asset-phone   { top: clamp(550px, 75.6vh, 705px); }
+  #auth-create-view .asset-apple   { top: clamp(620px, 83.7vh, 780px); }
+  .create-beta-link                { top: clamp(700px, 96.6vh, 900px); }
+  .auth-create-email-link          { top: clamp(700px, 96.6vh, 900px); }
 
-}
+  #auth-signin-view .asset-google  { top: clamp(240px, 35.1vh, 327px); }
+  #auth-signin-view .asset-phone   { top: clamp(310px, 43.2vh, 403px); }
+  #auth-signin-view .asset-apple   { top: clamp(380px, 51.4vh, 479px); }
+  .signin-beta-link                { top: clamp(560px, 69.5vh, 648px); }
 
-/* 3. 如果某些特殊页面（如 #input-modal）已经自带滚动，避免冲突 */
-#input-modal {
-  overflow-y: auto !important;
-  padding-bottom: 100px !important;
-}
+  #auth-login-view .asset-google   { top: clamp(200px, 27.9vh, 260px); }
+  #auth-login-view .asset-phone    { top: clamp(270px, 36.1vh, 336px); }
+  #auth-login-view .asset-apple    { top: clamp(340px, 44.2vh, 412px); }
+  #auth-login-view .asset-email-button { top: clamp(410px, 52.3vh, 488px); }
+  #auth-login-view .asset-create   { top: clamp(660px, 83.7vh, 780px); }
+  .login-beta-link                 { top: clamp(640px, 79.7vh, 742px); }
 
-/* 4. 确保绝对定位的按钮在滚动时不会被裁剪（它们会随内容滚动，这是正常的） */
-/* 不需要额外修改，因为它们是相对于页面内容定位的 */
-/* ============================================================
-   修复 Setup 页面无法滚动的问题（保留背景图和按钮位置）
-   ============================================================ */
+  /* Guide button — move it closer to the fold */
+  .guide-bottom {
+    top: clamp(600px, 87.9vh, 820px);
+  }
 
-/* 让 Setup 页面容器允许滚动 */
-#setup.setup-asset-mode {
-  overflow-y: auto !important;
-  overflow-x: hidden;
-  min-height: 100vh;          /* 让高度至少占满屏幕 */
-  height: auto;
-  position: relative;
-}
-
-/* 调整底部的按钮容器，确保它显示在内容末尾 */
-.setup-footer {
-  position: relative;
-  margin-top: 20px;
-  padding-bottom: 30px;
+  /* Setup: button positions adapt */
+  .setup-maybe-later    { top: clamp(580px, 77.6vh, 723px); }
+  .setup-turn-on        { top: clamp(640px, 84.7vh, 789px); }
+  .setup-begin-exploring { top: clamp(640px, 84.7vh, 789px); }
+  .setup-answer-a { top: clamp(280px, 37.3vh, 348px); }
+  .setup-answer-b { top: clamp(280px, 37.3vh, 348px); }
+  .setup-answer-c { top: clamp(430px, 56.8vh, 530px); }
+  .setup-answer-d { top: clamp(430px, 56.8vh, 530px); }
+  .setup-time-chip { top: clamp(380px, 48.5vh, 452px); }
+  .setup-reminder-switch { top: clamp(425px, 53.7vh, 501px); }
 }
