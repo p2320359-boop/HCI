@@ -7832,3 +7832,35 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 #auth-create-view .asset-email-button {
   top: 555px;
 }
+
+
+
+.page {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  height: auto;
+  min-height: 100vh;
+}
+
+#setup.setup-asset-mode {
+  overflow-y: auto !important;
+  height: auto;
+}
+#setup.setup-asset-mode .setup-body {
+  position: relative;
+  min-height: 932px;      
+}
+
+#auth {
+  overflow-y: auto !important;
+  height: auto;
+}
+
+#app {
+  overflow: visible !important;
+}
+
+/* 5. 为每个页面底部增加安全区域间距，避免被导航栏遮挡 */
+.page {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
