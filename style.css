@@ -7817,3 +7817,43 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 #auth-create-view .asset-email-button {
   top: 555px;
 }
+
+/* ============================================================
+   修复所有页面滚动问题 + 固定底部导航栏
+   ============================================================ */
+
+/* 1. 让每个页面容器都可以滚动，同时保证内容完整显示 */
+.page {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;  /* iOS 平滑滚动 */
+  height: auto;
+  min-height: 100vh;
+  /* 关键：底部留出足够空间，防止内容被固定导航栏遮挡 */
+  padding-bottom: 85px !important;
+  box-sizing: border-box;
+}
+
+/* 2. 固定底部导航栏：无论页面如何滚动，始终贴在屏幕底部 */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 20px);
+  max-width: 416px;
+  z-index: 1000;
+  background-color: var(--surface);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  /* 确保导航栏不会被内容遮盖 */
+  pointer-events: auto;
+}
+
+/* 3. 如果某些特殊页面（如 #input-modal）已经自带滚动，避免冲突 */
+#input-modal {
+  overflow-y: auto !important;
+  padding-bottom: 100px !important;
+}
+
+/* 4. 确保绝对定位的按钮在滚动时不会被裁剪（它们会随内容滚动，这是正常的） */
+/* 不需要额外修改，因为它们是相对于页面内容定位的 */
