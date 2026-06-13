@@ -7864,3 +7864,115 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
 .page {
   padding-bottom: env(safe-area-inset-bottom, 20px);
 }
+
+
+/* ============================================================
+   移动端适配修复：使绝对定位元素相对屏幕宽度自适应
+   ============================================================ */
+
+/* 1. 全局容器居中，防止横向溢出 */
+#app {
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 2. 底部导航栏居中且不随滚动移动 */
+.bottom-nav {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 90vw !important;
+  max-width: 416px;
+  height: 70px;
+  background-size: contain;
+  z-index: 100;
+}
+
+/* 为页面内容留出底部空间，避免被导航栏遮挡 */
+.page {
+  padding-bottom: 80px;
+}
+
+/* 3. Setup 页面选项按钮（4个答案）自适应宽度 */
+.setup-answer {
+  width: 38vw !important;
+  max-width: 166px;
+  height: auto;
+  aspect-ratio: 166 / 178;
+}
+.setup-answer-a { left: 5% !important; right: auto; }
+.setup-answer-b { left: auto !important; right: 5% !important; }
+.setup-answer-c { left: 5% !important; top: 55% !important; right: auto; }
+.setup-answer-d { left: auto !important; right: 5% !important; top: 55% !important; }
+
+.setup-answer img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 4. Setup 复选框行（Goals / Helpful）自适应 */
+.setup-check-hit {
+  left: 5% !important;
+  width: 90% !important;
+  max-width: 355px;
+}
+.setup-check-box {
+  left: 9px !important;
+}
+
+/* 5. Setup 时间提醒 chips 自适应 */
+.setup-time-chip {
+  width: 18vw !important;
+  max-width: 64px;
+  left: auto;
+  right: auto;
+}
+.setup-time-1, .setup-switch-1 { left: 10% !important; }
+.setup-time-2, .setup-switch-2 { left: 50% !important; transform: translateX(-50%); }
+.setup-time-3, .setup-switch-3 { right: 10% !important; left: auto; }
+
+/* 6. Explore 英雄区域按钮自适应 */
+.explore-hero-main {
+  width: 90vw !important;
+  max-width: 376px;
+  height: auto;
+  aspect-ratio: 376 / 270;
+  margin: 0 auto;
+}
+
+/* 7. Input Modal 绝对定位元素自适应 */
+#input-modal {
+  background-size: 100% auto;
+}
+.story-area {
+  left: 5% !important;
+  width: 90% !important;
+}
+.qtag-group {
+  left: 5% !important;
+  width: 90% !important;
+}
+.mode-tab {
+  width: 30vw !important;
+  max-width: 128px;
+  height: auto;
+  aspect-ratio: 128 / 88;
+}
+.input-mode-tabs {
+  left: 5% !important;
+  width: 90% !important;
+  justify-content: center;
+}
+
+/* 8. 其他可能错位的容器 */
+.auth-form-view, .auth-view {
+  background-size: 100% auto;
+}
+.asset-email-button, .asset-create, .asset-google, .asset-phone, .asset-apple {
+  width: 100% !important;
+  left: 0 !important;
+}
