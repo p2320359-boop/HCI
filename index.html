@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Aemona</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260612-5">
 </head>
 <body>
 <div id="app">
@@ -19,34 +19,19 @@
   </div>
 
   <!-- ══════════════════════════════════════
-       GUIDE (3 onboarding slides)
+       GUIDE (7 onboarding slides)
   ══════════════════════════════════════ -->
   <div class="page" id="guide">
     <div class="guide-slides">
 
-      <div class="guide-slide active">
-        <div class="guide-illustration">🪼</div>
-        <div class="guide-title serif">It's not that<br>you won't.</div>
-        <p class="guide-sub">Emotions become clearer when you learn their language.</p>
-      </div>
+      <div class="guide-slide active"></div>
+      <div class="guide-slide"></div>
+      <div class="guide-slide"></div>
+      <div class="guide-slide"></div>
+      <div class="guide-slide"></div>
+      <div class="guide-slide"></div>
+      <div class="guide-slide"></div>
 
-      <div class="guide-slide">
-        <div class="guide-illustration">🌊</div>
-        <div class="guide-title serif">You don't have to<br>name it to feel it.</div>
-        <p class="guide-sub">Aemona meets you where you are — even when that place is just "off".</p>
-      </div>
-
-      <div class="guide-slide">
-        <div class="guide-illustration">🌸</div>
-        <div class="guide-title serif">Step into your<br>inner world.</div>
-        <p class="guide-sub">Let's see what's waiting there.</p>
-      </div>
-
-    </div>
-    <div class="guide-dots">
-      <div class="guide-dot active"></div>
-      <div class="guide-dot"></div>
-      <div class="guide-dot"></div>
     </div>
     <div class="guide-bottom">
       <button class="btn" id="guide-btn" onclick="guideNext()">Continue</button>
@@ -57,86 +42,114 @@
        AUTH
   ══════════════════════════════════════ -->
   <div class="page" id="auth">
-    <div class="auth-hd" style="position:relative">
-      <button class="btn sm ghost auth-sign-in" id="auth-sign-in-btn" onclick="switchTab('login');document.getElementById('auth-sign-in-btn').style.display='none'">Sign in</button>
-      <h2 class="serif">Create your account</h2>
-      <p>Your private emotional space.</p>
-      <div class="auth-benefits">
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">☁️</div>
-          <p>Back up your journey and access Aemona across all your devices</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">✦</div>
-          <p>Unlock AI-powered support to name and work through your emotions</p>
-        </div>
-        <div class="auth-benefit">
-          <div class="auth-benefit-icon">📊</div>
-          <p>Track your emotional check-ins and uncover patterns over time</p>
-        </div>
-      </div>
+    <div class="auth-view active" id="auth-create-view">
+      <button class="auth-asset-button asset-signin" onclick="switchAuthView('signin')" aria-label="Sign in"></button>
+      <button class="auth-asset-button asset-google" onclick="socialLogin('google')" aria-label="Continue with Google"></button>
+      <button class="auth-asset-button asset-phone" onclick="showPhoneUnsupported()" aria-label="Continue with phone"></button>
+      <button class="auth-asset-button asset-apple" onclick="showAppleUnsupported()" aria-label="Continue with Apple"></button>
+      <button class="auth-asset-button asset-email-button" onclick="openEmailLogin('create')" aria-label="Continue with Email"></button>
+      <button class="auth-beta-link create-beta-link" onclick="openBetaAccess('create')">Enter beta access code</button>
     </div>
-    <div class="auth-wrap">
-      <!-- Social options -->
-      <div class="auth-social">
-        <button class="auth-social-btn" onclick="socialLogin('google')">
-          <span class="social-icon">G</span> Continue with Google
+
+    <div class="auth-view" id="auth-signin-view">
+      <button class="auth-asset-button asset-back" onclick="switchAuthView('create')" aria-label="Back"></button>
+      <button class="auth-asset-button asset-google" onclick="socialLogin('google')" aria-label="Continue with Google"></button>
+      <button class="auth-asset-button asset-phone" onclick="showPhoneUnsupported()" aria-label="Continue with phone"></button>
+      <button class="auth-asset-button asset-apple" onclick="showAppleUnsupported()" aria-label="Continue with Apple"></button>
+      <button class="auth-asset-button asset-email" onclick="openEmailLogin('signin')" aria-label="Continue with Email"></button>
+      <button class="auth-beta-link signin-beta-link" onclick="openBetaAccess('signin')">Enter beta access code</button>
+    </div>
+
+    <div class="auth-view" id="auth-login-view">
+      <button class="auth-asset-button asset-google" onclick="socialLogin('google')" aria-label="Continue with Google"></button>
+      <button class="auth-asset-button asset-phone" onclick="showPhoneUnsupported()" aria-label="Continue with phone"></button>
+      <button class="auth-asset-button asset-apple" onclick="showAppleUnsupported()" aria-label="Continue with Apple"></button>
+      <button class="auth-asset-button asset-email-button" onclick="openEmailLogin('login')" aria-label="Continue with Email"></button>
+      <button class="auth-asset-button asset-create" onclick="switchAuthView('create')" aria-label="Create a free account"></button>
+      <button class="auth-beta-link login-beta-link" onclick="openBetaAccess('login')">Enter beta access code</button>
+    </div>
+
+    <div class="auth-view auth-form-view" id="auth-email-login-view">
+      <button class="auth-back" onclick="closeAuthSubView()" aria-label="Back">&larr;</button>
+      <h2 class="serif">Sign in with Email</h2>
+      <div class="auth-err" id="login-err"></div>
+      <input type="email" id="l-email" placeholder="Email address" autocomplete="email">
+      <input type="password" id="l-pass" placeholder="Password" autocomplete="current-password">
+      <button class="btn" onclick="handleLogin()">Sign in</button>
+    </div>
+
+    <div class="auth-view auth-form-view" id="auth-email-register-view">
+      <button class="auth-back" onclick="switchAuthView('create')" aria-label="Back">&larr;</button>
+      <h2 class="serif">Create with Email</h2>
+      <div class="auth-err" id="reg-err"></div>
+      <input class="reg-input" type="text" id="r-name" placeholder="Your Full Name" autocomplete="name">
+      <input class="reg-input" type="email" id="r-email" placeholder="Your Email" autocomplete="email">
+      <div class="pw-field">
+        <input class="reg-input" type="password" id="r-pass" placeholder="Create Password" autocomplete="new-password">
+        <button class="pw-eye" type="button" onclick="togglePw('r-pass', this)" aria-label="Show password">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
-        <button class="auth-social-btn" onclick="socialLogin('phone')">
-          <span class="social-icon">📱</span> Continue with phone
+      </div>
+      <div class="pw-hint">Minimum 8 characters with minimum 1 upper and 1 lower case.</div>
+      <div class="pw-field">
+        <input class="reg-input" type="password" id="r-confirm" placeholder="Confirm Password" autocomplete="new-password">
+        <button class="pw-eye" type="button" onclick="togglePw('r-confirm', this)" aria-label="Show password">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
+      <button class="btn btn-dark" onclick="handleRegister()">Create Account</button>
+    </div>
 
-      <div class="auth-divider">
-        <div class="auth-divider-line"></div>
-        <span>or</span>
-        <div class="auth-divider-line"></div>
+    <div class="auth-view auth-form-view" id="auth-phone-view">
+      <button class="auth-back" onclick="closeAuthSubView()" aria-label="Back">&larr;</button>
+      <h2 class="serif">Continue with Phone</h2>
+      <div class="auth-err" id="phone-err"></div>
+      <div class="phone-input-row">
+        <select id="phone-country" aria-label="Country code">
+          <option value="+1">US/CA +1</option>
+          <option value="+82">KR +82</option>
+          <option value="+86">CN +86</option>
+          <option value="+81">JP +81</option>
+          <option value="+44">UK +44</option>
+          <option value="+61">AU +61</option>
+          <option value="+64">NZ +64</option>
+          <option value="+65">SG +65</option>
+          <option value="+852">HK +852</option>
+          <option value="+886">TW +886</option>
+          <option value="+91">IN +91</option>
+          <option value="+49">DE +49</option>
+          <option value="+33">FR +33</option>
+          <option value="+39">IT +39</option>
+          <option value="+34">ES +34</option>
+          <option value="+31">NL +31</option>
+          <option value="+46">SE +46</option>
+          <option value="+47">NO +47</option>
+          <option value="+55">BR +55</option>
+          <option value="+52">MX +52</option>
+        </select>
+        <input type="tel" id="phone-number" placeholder="Phone number" inputmode="numeric" autocomplete="tel-national" oninput="formatPhoneInput(this)">
       </div>
+      <button class="btn" id="send-phone-code" onclick="sendPhoneCode()">Send verification code</button>
+      <input type="text" id="phone-code" placeholder="6-digit verification code" inputmode="numeric" autocomplete="one-time-code">
+      <button class="btn ghost" onclick="confirmPhoneCode()">Verify and continue</button>
+      <div id="recaptcha-container"></div>
+    </div>
 
-      <!-- Tab switch -->
-      <div class="auth-tabs">
-        <div class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Sign In</div>
-        <div class="auth-tab"        id="tab-register" onclick="switchTab('register')">Create Account</div>
-      </div>
-
-      <!-- Login form -->
-      <div id="login-form" class="auth-form">
-        <div class="auth-err" id="login-err"></div>
-        <div class="inp-group">
-          <label>Username</label>
-          <input type="text"     id="l-user" placeholder="your username"       autocomplete="username">
-        </div>
-        <div class="inp-group">
-          <label>Password</label>
-          <input type="password" id="l-pass" placeholder="••••••••"            autocomplete="current-password">
-        </div>
-        <button class="btn" onclick="handleLogin()" style="margin-top:6px">Sign In</button>
-      </div>
-
-      <!-- Register form -->
-      <div id="register-form" class="auth-form" style="display:none">
-        <div class="auth-err" id="reg-err"></div>
-        <div class="inp-group">
-          <label>Username</label>
-          <input type="text"     id="r-user"    placeholder="choose a username"     autocomplete="username">
-        </div>
-        <div class="inp-group">
-          <label>Password</label>
-          <input type="password" id="r-pass"    placeholder="at least 6 characters" autocomplete="new-password">
-        </div>
-        <div class="inp-group">
-          <label>Confirm</label>
-          <input type="password" id="r-confirm" placeholder="repeat password"        autocomplete="new-password">
-        </div>
-        <button class="btn" onclick="handleRegister()" style="margin-top:6px">Create Account</button>
-      </div>
+    <div class="auth-view auth-form-view" id="auth-beta-view">
+      <button class="auth-back" onclick="closeAuthSubView()" aria-label="Back">&larr;</button>
+      <h2 class="serif">Beta access</h2>
+      <div class="auth-err" id="beta-err"></div>
+      <input type="text" id="beta-code" placeholder="Enter your beta access code" autocomplete="off" onkeydown="if(event.key==='Enter')submitBetaCode()">
+      <button class="btn" onclick="submitBetaCode()">Enter Aemona</button>
     </div>
   </div>
+  <div class="app-toast" id="app-toast" role="status" aria-live="polite"></div>
 
   <!-- ══════════════════════════════════════
        SETUP (9 steps)
   ══════════════════════════════════════ -->
   <div class="page" id="setup">
+    <button class="setup-asset-back" type="button" onclick="setupBack()" aria-label="Go back"></button>
     <div class="ph">
       <div class="ph-back" onclick="setupBack()">←</div>
       <div class="prog-bar" style="flex:1;margin:0">
@@ -183,19 +196,24 @@
         <div id="explore-hist-list"></div>
       </div>
     </div>
+    <div class="explore-promo" id="explore-promo" aria-hidden="true">
+      <button class="explore-promo-backdrop" type="button" onclick="closeExplorePromo()" aria-label="Close welcome card"></button>
+      <div class="explore-promo-card" role="dialog" aria-modal="true" aria-label="Find my words">
+        <button class="explore-promo-close" type="button" onclick="closeExplorePromo()" aria-label="Close"></button>
+        <button class="explore-promo-action" type="button" onclick="openUnpackFromPromo()" aria-label="Find my words"></button>
+      </div>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════
        INPUT MODAL (story entry)
   ══════════════════════════════════════ -->
   <div class="page" id="input-modal">
-    <div class="input-modal-hd">
-      <div class="ph-close" onclick="go('explore')">✕</div>
-      <h2 class="serif" style="flex:1;padding:0 12px">What's on your mind right now?</h2>
-      <div class="unpack-chip">Unpack it ✦</div>
-    </div>
-    <div class="input-modal-scrollable" style="flex:1; overflow-y: auto; padding-bottom: 20px;">
-    <!-- 原有内容：story-area, input-mode-tabs, divider-text, qtag-sections, input-footer -->
+    <button class="unpack-close" type="button" onclick="go('explore')" aria-label="Close"></button>
+    <button class="unpack-chip-asset" type="button" onclick="toggleEntryModeMenu()" aria-label="Choose entry mode"></button>
+    <div class="entry-mode-menu" id="entry-mode-menu">
+      <button type="button" class="active" onclick="selectEntryMode('unpack')">Unpack it</button>
+      <button type="button" onclick="selectEntryMode('note')">Note it</button>
     </div>
     <!-- Story prompts & textarea -->
     <div class="story-area">
@@ -206,8 +224,10 @@
         <div class="story-prompt-row" onclick="fillStoryPrompt('A lot of small things have been adding up.')">A lot of small things have been adding up.</div>
         <div class="story-prompt-row" onclick="fillStoryPrompt('I\'m not sure why this is affecting me so much…')">I'm not sure why this is affecting me so much…</div>
       </div>
-      <textarea id="story-input" placeholder=" oninput="updateCharCount()"></textarea>
+      <textarea id="story-input" placeholder="" oninput="updateCharCount()"></textarea>
       <div class="story-char-count" id="story-char-count">0/1000</div>
+      <input type="file" id="show-image-input" accept="image/*" hidden onchange="handleShowImage(this)">
+      <div class="input-attachment-panel" id="input-attachment-panel"></div>
     </div>
 
     <!-- Input mode tabs -->
@@ -229,7 +249,7 @@
     <div id="qtag-sections"></div>
 
     <div class="input-footer">
-      <button class="btn" onclick="submitStory()">✦ Explore with AI</button>
+      <button class="unpack-submit" type="button" onclick="submitStory()">✦ Explore with AI</button>
     </div>
   </div>
 
@@ -238,8 +258,8 @@
   ══════════════════════════════════════ -->
   <div class="page" id="ai-loading-page">
     <div class="ai-load-wrap">
-      <div class="ai-orb"></div>
-      <div class="ai-status" id="ai-status">Reading what you shared…</div>
+      <img class="ai-logo-breath" src="assets/icon/appicon.png" alt="Aemona">
+      <div class="ai-status" id="ai-status">Reading what you shared...</div>
     </div>
   </div>
 
@@ -253,7 +273,7 @@
         <div class="unpack-chip">Unpack it ✦</div>
       </div>
     </div>
-    <div class="q-page-body" id="q-page-body" style="flex:1;overflow-y:auto;padding:0 24px 40px"></div>
+    <div class="q-page-body" id="q-page-body"></div>
   </div>
 
   <!-- ══════════════════════════════════════
@@ -279,6 +299,11 @@
 
       <!-- Companion note -->
       <div style="background:var(--purple-bg);border:1px solid var(--purple-bd);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.6;font-style:italic" id="companion-note"></div>
+      
+      <div class="result-section" id="ai-analysis-section" style="display: none;">
+        <div class="result-section-title">AI Mood Analysis</div>
+        <div id="ai-analysis-text" class="analysis-text"></div>
+      </div>
 
       <!-- Recommended tools -->
       <div class="result-section">
@@ -290,7 +315,7 @@
 
     <!-- Sticky footer -->
     <div class="result-footer">
-      <button class="btn" onclick="saveResult()">Save</button>
+      <button class="btn" onclick="shareResult()">Save</button>
       <button class="btn ghost" onclick="go('explore')">Done</button>
     </div>
   </div>
@@ -298,55 +323,72 @@
   <!-- ══════════════════════════════════════
        TOOLS PAGE
   ══════════════════════════════════════ -->
+  <div class="page" id="explore-library">
+    <div class="discover-grid-hd">
+      <button class="discover-grid-back" type="button" onclick="go('explore')" aria-label="Back to Explore">←</button>
+      <div>
+        <div class="discover-grid-title serif" id="discover-grid-title">Discover</div>
+        <div class="discover-grid-sub" id="discover-grid-sub">A softer place to look closer.</div>
+      </div>
+    </div>
+    <div class="discover-grid" id="discover-grid"></div>
+  </div>
+
+  <div class="page" id="explore-detail">
+    <button class="explore-detail-back" type="button" onclick="go('explore')" aria-label="Back to Explore"></button>
+    <div class="explore-detail-scroll">
+      <div class="explore-detail-visual" id="explore-detail-visual"></div>
+      <div class="explore-detail-copy">
+        <div class="explore-detail-kicker" id="explore-detail-kicker"></div>
+        <h1 class="serif" id="explore-detail-title"></h1>
+        <p class="explore-detail-prompt" id="explore-detail-prompt"></p>
+        <section class="explore-detail-section" id="explore-detail-example-wrap">
+          <h2>Try beginning here</h2>
+          <p id="explore-detail-example"></p>
+        </section>
+        <section class="explore-detail-section">
+          <h2>Why this can help</h2>
+          <p id="explore-detail-why"></p>
+        </section>
+        <section class="explore-detail-section explore-detail-practice">
+          <h2>A small next step</h2>
+          <p id="explore-detail-practice"></p>
+        </section>
+      </div>
+    </div>
+    <button class="explore-detail-action" type="button" onclick="startExploreReflection()">Write about this</button>
+  </div>
+
   <div class="page" id="tools-page">
     <div class="tools-hd">
       <div class="tools-title serif">Tools</div>
-      <button class="tools-search">🔍</button>
-    </div>
-    <div class="tools-grid">
-      <div class="tool-card" onclick="go('reg-clear')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/tap.png" alt="Tap It Out" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Tap It Out</div>
-        <div class="tool-card-desc">Release the tension, one tap at a time.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-drag')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/draw.png" alt="Draw the Noise" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Draw the Noise</div>
-        <div class="tool-card-desc">Give it a shape, don't need the right words.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-breath')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/breath.png" alt="Soft Breath" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Soft Breath</div>
-        <div class="tool-card-desc">Slow your breath, soften your body.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-badge')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/badge.png" alt="Pocket Badge" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Pocket Badge</div>
-        <div class="tool-card-desc">You did well. Don't forget that.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-unsent')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/unsent.png" alt="Unsent Note" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Unsent Note</div>
-        <div class="tool-card-desc">Say it anyway. You don't have to send it.</div>
-      </div>
-      <div class="tool-card" onclick="go('reg-loop')">
-        <div class="tool-card-icon">
-          <img src="assets/tools/loop.png" alt="Burn the Loop" class="tool-icon-img">
-        </div>
-        <div class="tool-card-name">Burn the Loop</div>
-        <div class="tool-card-desc">Let it go. It doesn't need to stay.</div>
+      <div class="tools-search-wrap" id="tools-search-wrap">
+        <input id="tools-search-input" type="search" placeholder="Search practices" aria-label="Search tools" oninput="filterTools(this.value)" onkeydown="if(event.key==='Escape')closeToolsSearch()">
+        <button class="tools-search-button" type="button" onclick="toggleToolsSearch()" aria-label="Search tools"></button>
       </div>
     </div>
+    <div class="tools-search-status" id="tools-search-status"></div>
+    <div class="tools-categories" id="tools-categories"></div>
+  </div>
+
+  <div class="page" id="tool-category-page">
+    <button class="tool-category-back" type="button" onclick="go('tools-page')" aria-label="Back to Tools"></button>
+    <div class="tool-category-detail-head">
+      <span id="tool-category-detail-kicker">Aemona practices</span>
+      <h1 class="serif" id="tool-category-detail-title">Breathing</h1>
+      <p id="tool-category-detail-desc"></p>
+    </div>
+    <div class="tool-category-detail-grid" id="tool-category-detail-grid"></div>
+  </div>
+
+  <div class="page" id="tool-experience">
+    <button class="tool-experience-close" type="button" onclick="closeToolExperience()" aria-label="Back to tool category"></button>
+    <iframe id="tool-experience-frame" title="Aemona interactive tool"></iframe>
+  </div>
+
+  <div class="page" id="native-tool">
+    <button class="tool-detail-back" type="button" onclick="returnToToolCategory()" aria-label="Back"></button>
+    <div class="native-tool-body" id="native-tool-body"></div>
   </div>
 
 
@@ -356,7 +398,8 @@
   <div class="page" id="entries-page">
     <div class="entries-hd">
       <div class="entries-title serif">Entries</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">📅</button>
+      <button class="entries-calendar-button" type="button" onclick="toggleEntriesDatePicker()" aria-label="Open calendar"></button>
+      <div class="entries-date-popover" id="entries-date-popover"></div>
     </div>
     <div class="month-tabs" id="month-tabs"></div>
     <div class="entries-cal-body">
@@ -366,6 +409,9 @@
         <span>THU</span><span>FRI</span><span>SAT</span>
       </div>
       <div class="e-cal-grid" id="e-cal-grid"></div>
+      <div class="entries-door-preview" id="entries-door-preview">
+        <div class="entries-preview-copy"><strong class="serif">A feeling lives behind each door.</strong><span>Tap a colored door to reveal it. Double-click to read the full entry.</span></div>
+      </div>
     </div>
   </div>
 
@@ -375,7 +421,7 @@
   <div class="page" id="patterns-page">
     <div class="patterns-hd">
       <div class="patterns-title serif">Patterns</div>
-      <button style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">⚙️</button>
+      <button class="patterns-settings-button" type="button" onclick="go('settings-page')" aria-label="Open settings"></button>
     </div>
     <div class="patterns-tabs">
       <div class="patterns-tab active" data-tab="overview" onclick="switchPatternsTab('overview')">Overview</div>
@@ -427,6 +473,10 @@
     </div>
   </div>
 
+  <div class="page" id="pattern-detail">
+    <div class="pattern-pack-detail" id="pattern-pack-detail"></div>
+  </div>
+
   <!-- ══════════════════════════════════════
        REG: DRAG (Draw the Noise)
   ══════════════════════════════════════ -->
@@ -448,18 +498,21 @@
        REG: BREATH (Soft Breath)
   ══════════════════════════════════════ -->
   <div class="page" id="reg-breath">
-    <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
-      <div><div class="ph-title">Soft Breath</div><div class="ph-sub">Follow the rhythm</div></div>
+    <button class="tool-detail-back" type="button" onclick="returnToToolCategory();stopBreath()" aria-label="Back"></button>
+    <div class="breath-tool-copy">
+      <div class="breath-tool-kicker">Breathing</div>
+      <h1 class="serif" id="breath-title">Box Breathing</h1>
+      <p id="breath-description">Slow down your nervous system through a simple rhythmic pattern.</p>
     </div>
-    <div class="reg-body">
-      <div class="breath-scene">
-        <div class="breath-ring"><div class="breath-core"></div></div>
-        <div class="breath-label" id="breath-label">Breathe in…</div>
-        <div class="breath-note">4 seconds in · 4 seconds out</div>
+    <div class="breath-stage" id="breath-stage">
+      <div class="breath-visual" id="breath-visual"></div>
+      <div class="breath-readout">
+        <span class="breath-label" id="breath-label">Breathe in</span>
+        <strong id="breath-count">4</strong>
       </div>
-      <button class="btn ghost sm" onclick="go('tools-page');stopBreath()">Done</button>
     </div>
+    <div class="breath-note" id="breath-note">In 4 · Hold 4 · Out 4 · Hold 4</div>
+    <button class="breath-toggle" id="breath-toggle" type="button" onclick="toggleBreathSession()">Pause</button>
   </div>
 
   <!-- ══════════════════════════════════════
@@ -497,8 +550,8 @@
        REG: UNSENT NOTE
   ══════════════════════════════════════ -->
   <div class="page" id="reg-unsent">
+    <button class="tool-detail-back" type="button" onclick="returnToToolCategory()" aria-label="Back"></button>
     <div class="ph">
-      <div class="ph-back" onclick="go('tools-page')">←</div>
       <div><div class="ph-title">Unsent Note</div><div class="ph-sub">Say it anyway</div></div>
     </div>
     <div class="reg-body" style="align-items:stretch">
@@ -506,7 +559,7 @@
       <div class="unsent-area">
         <textarea placeholder="Dear…"></textarea>
       </div>
-      <button class="btn ghost sm" onclick="go('tools-page')">Done</button>
+      <button class="btn ghost sm" onclick="returnToToolCategory()">Done</button>
     </div>
   </div>
 
@@ -528,9 +581,116 @@
     </div>
   </div>
 
+  <!-- NOTE IT -->
+  <div class="page" id="note-it">
+    <button class="note-it-back" type="button" onclick="go('explore')" aria-label="Close"></button>
+    <button class="note-it-chip" type="button" onclick="selectEntryMode('unpack')" aria-label="Switch to Unpack it">Note it</button>
+    <div class="note-it-copy">
+      <h1 class="serif">How would you<br>describe your mood?</h1>
+      <span>I am</span>
+      <strong class="serif" id="note-it-emotion">Exhilarated</strong>
+      <small id="note-it-definition"></small>
+    </div>
+    <div class="emotion-wheel-wrap">
+      <div class="emotion-wheel" id="emotion-wheel" aria-label="Emotion wheel"></div>
+    </div>
+    <div class="note-it-footer">
+      <button class="btn" type="button" onclick="saveNoteIt()">Submit</button>
+    </div>
+  </div>
+
   <!-- ══════════════════════════════════════
        BOTTOM NAV
   ══════════════════════════════════════ -->
+  <!-- SETTINGS PAGE -->
+  <div class="page" id="settings-page">
+    <div class="settings-top">
+      <button class="settings-close" type="button" onclick="go('patterns-page')" aria-label="Close settings"></button>
+    </div>
+
+    <div class="settings-scroll">
+      <h1 class="settings-title serif">Settings</h1>
+
+      <section class="settings-section">
+        <h2>Account</h2>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('profile')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/user.svg')"></span>
+          <span><strong id="settings-profile-name">Profile</strong><small id="settings-profile-sub">Name, companion, and setup</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('notifications')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/bell.svg')"></span>
+          <span><strong>Notifications</strong><small>Motivation reminders and check-ins</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('security')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/shield-lock.svg')"></span>
+          <span><strong>Security & data</strong><small id="settings-data-sub">Local data storage</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('accessibility')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/accessible.svg')"></span>
+          <span><strong>Accessibility</strong><small>Motion, contrast, and readable text</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('language')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/language.svg')"></span>
+          <span><strong>Language</strong><small>English for this prototype</small></span>
+          <i></i>
+        </button>
+      </section>
+
+      <section class="settings-section">
+        <h2>Features</h2>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('explore')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/compass.svg')"></span>
+          <span><strong>Explore preferences</strong><small>Library and recommendation style</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('tools')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/tools.svg')"></span>
+          <span><strong>Tools preferences</strong><small>Default tools and gentle nudges</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('ai')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/brain.svg')"></span>
+          <span><strong>AI settings</strong><small>Question style and response depth</small></span>
+          <i></i>
+        </button>
+      </section>
+
+      <section class="settings-section">
+        <h2>Resources</h2>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('hotlines')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/lifebuoy.svg')"></span>
+          <span><strong>Mental health hotlines</strong><small>Immediate support resources</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('faq')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/help.svg')"></span>
+          <span><strong>FAQ</strong><small>How Aemona saves and uses data</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('feedback')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/message.svg')"></span>
+          <span><strong>Send feedback</strong><small>Tell us what felt confusing</small></span>
+          <i></i>
+        </button>
+        <button class="settings-row" type="button" onclick="openSettingsDetail('about')">
+          <span class="settings-row-icon" style="--icon:url('assets/icon/settings/info-circle.svg')"></span>
+          <span><strong>About Aemona</strong><small>Version, team, and philosophy</small></span>
+          <i></i>
+        </button>
+      </section>
+      <div style="margin-top: 32px; text-align: center;">
+        <button class="btn ghost" onclick="handleLogout()" style="max-width: 200px; margin: 0 auto;">Sign out</button>
+      </div>
+    </div>
+
+    <div class="settings-detail" id="settings-detail" aria-live="polite"></div>
+  </div>
+
+  <div class="bottom-nav-scrim" id="bottom-nav-scrim" aria-hidden="true"></div>
   <nav class="bottom-nav" id="bottom-nav">
     <div class="nav-item active" onclick="go('explore')">
       <div class="nav-icon">△</div>
@@ -552,8 +712,9 @@
 
 </div><!-- #app -->
 
+<script type="module" src="firebase-auth.js"></script>
 <script src="data.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=20260612-5"></script>
 <script>
   // Burn the loop animation
   function burnLoop() {
