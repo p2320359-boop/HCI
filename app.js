@@ -348,63 +348,15 @@ function showLoggedOutEntry() {
 }
 
 (function init() {
+  console.log('Init: starting splash');
   go('splash');
-  const setupPreviewParam = new URLSearchParams(window.location.search).get('setup');
-  if (setupPreviewParam !== null) {
-    const previewStep = Number(setupPreviewParam || 1);
-    setupStep = Math.min(9, Math.max(1, Number.isFinite(previewStep) ? previewStep : 1));
-    currentUser = localStorage.getItem('ae_user') || 'setup_preview';
-    selectedCompanion = COMPANIONS.find(c => c.id === getData(currentUser).companion) || COMPANIONS[0];
-    setTimeout(() => {
-      hideBottomNav();
-      go('setup');
-    }, 0);
-    return;
-  }
 
-  const savedCurrentUser = localStorage.getItem('ae_user');
-  if (savedCurrentUser) {
-    if (savedCurrentUser.startsWith('beta_') && savedCurrentUser !== BETA_USER_ID) {
-      migrateBetaData(savedCurrentUser);
-      currentUser = BETA_USER_ID;
-      localStorage.setItem('ae_user', currentUser);
-    } else {
-      currentUser = savedCurrentUser;
-    }
-    const savedData = getData(currentUser);
-    selectedCompanion = COMPANIONS.find(c => c.id === savedData.companion) || COMPANIONS[0];
-    if (restoreSessionState()) {
-      if (savedData.companion || savedData.sp) showBottomNav();
-      return;
-    }
-  }
-
-  const finishInit = () => {
-    const betaAccessId = localStorage.getItem(BETA_ACCESS_KEY);
-    if (betaAccessId) {
-      completeBetaAccess(betaAccessId);
-      return;
-    }
-    const redirectResult = window.firebaseAuthApi?.ready
-      ? window.firebaseAuthApi.redirectResult
-      : null;
-    if (redirectResult) {
-      completeFirebaseLogin(redirectResult);
-      return;
-    }
-    const firebaseUser = window.firebaseAuthApi?.ready
-      ? window.firebaseAuthApi.currentUser
-      : null;
-    if (firebaseUser) showSignedInUser(firebaseUser);
-    else showLoggedOutEntry();
-  };
-  if (window.firebaseAuthApi) {
-    setTimeout(finishInit, 1800);
-  } else {
-    window.addEventListener('firebase-auth-ready', () => setTimeout(finishInit, 1800), { once: true });
-  }
+  // 强制 1.8 秒后进入 guide，不依赖任何外部回调
+  setTimeout(() => {
+    console.log('Init: timeout, going to guide');
+    go('guide');
+  }, 1800);
 })();
-
 
 // ── NAVIGATION ────────────────────────────────────────────────
 function go(id) {
