@@ -2,13 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Aemona</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260612-5">
 </head>
 <body>
+<script>
+  /* Scale the 430×932 design canvas to fit any viewport.
+     Runs before first paint so there is no layout jump.
+     Also re-runs on resize (landscape/portrait switch). */
+  (function scaleApp() {
+    const W = 430, H = 932;
+    function apply() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      /* Scale so the canvas fits entirely within the viewport.
+         Use the smaller of the two scale factors. */
+      const scale = Math.min(vw / W, vh / H);
+      /* On wide desktop screens cap at 1 so the UI doesn't enlarge */
+      const s = Math.min(scale, 1);
+      document.documentElement.style.setProperty('--app-scale', s);
+      /* Centre horizontally: the canvas is 430px wide, scaled to s*430.
+         Left offset = (vw - s*W) / 2 */
+      const app = document.getElementById('app');
+      if (app) {
+        app.style.marginLeft = ((vw - s * W) / 2) + 'px';
+      }
+    }
+    apply();
+    window.addEventListener('resize', apply);
+  })();
+</script>
 <div id="app">
 
   <!-- ══════════════════════════════════════
