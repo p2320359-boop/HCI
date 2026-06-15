@@ -7836,8 +7836,7 @@ input.reg-input:focus { border-color: var(--purple); background: rgba(255,255,25
   .auth-view {
     /* Scale the 932px canvas to fit the viewport height */
     transform-origin: top center;
-    /* Calculate scale: viewport-height / 932 */
-    /* Using a CSS approach: shrink the background and reposition absolute elements */
+
   }
 
   /* Shrink the auth background image to match actual viewport */
